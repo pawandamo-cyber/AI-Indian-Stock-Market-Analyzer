@@ -1,6 +1,6 @@
 import streamlit as st
 from services.stock_service import get_stock_info
-from services.chart_service import get_stock_chart
+from services.chart_service_v2 import get_stock_chart
 
 # ----------------------------
 # Page Configuration
