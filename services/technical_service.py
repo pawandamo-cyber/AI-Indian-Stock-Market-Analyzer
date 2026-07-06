@@ -4,7 +4,7 @@ import ta
 
 def calculate_rsi(symbol, period="6mo"):
     """
-    Calculate the latest RSI (14) value.
+    Calculate the latest RSI (14) value and its interpretation.
     """
 
     stock = yf.Ticker(symbol + ".NS")
@@ -19,4 +19,22 @@ def calculate_rsi(symbol, period="6mo"):
         window=14
     ).rsi()
 
-    return round(hist["RSI"].iloc[-1], 2)
+    latest_rsi = round(hist["RSI"].iloc[-1], 2)
+
+    if latest_rsi < 30:
+        signal = "🟢 Oversold"
+        recommendation = "BUY"
+
+    elif latest_rsi > 70:
+        signal = "🔴 Overbought"
+        recommendation = "SELL"
+
+    else:
+        signal = "🟡 Neutral"
+        recommendation = "HOLD"
+
+    return {
+        "value": latest_rsi,
+        "signal": signal,
+        "recommendation": recommendation
+    }

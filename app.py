@@ -1,6 +1,6 @@
 import streamlit as st
 from services.stock_service import get_stock_info
-from services.chart_service_v2 import get_stock_chart
+from services.chart_service import get_stock_chart
 from services.technical_service import calculate_rsi
 
 # ----------------------------
@@ -92,16 +92,55 @@ if menu == "Home":
 
                 rsi = calculate_rsi(stock.upper(), period)
 
-                st.metric(
-                label="RSI (14)",
-                value=rsi
-                )
+                st.subheader("📊 Technical Analysis")
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric("RSI (14)", rsi["value"])
+
+                with col2:
+                    st.write("### RSI Signal")
+
+                if "Oversold" in rsi["signal"]:
+                    st.success(rsi["signal"])
+
+                elif "Overbought" in rsi["signal"]:
+                    st.error(rsi["signal"])
+
+                else:
+                    st.warning(rsi["signal"])
+
+                with col3:
+
+                    st.write("### Recommendation")
+
+                if rsi["recommendation"] == "Potential BUY":
+                    st.success("🟢 BUY")
+
+                elif rsi["recommendation"] == "Potential SELL":
+                    st.error("🔴 SELL")
+
+                else:
+                    st.warning("🟡 HOLD")
+
+                    if rsi["recommendation"] == "Potential BUY":
+                        st.info("📈 RSI is below 30, indicating the stock may be oversold and could present a buying opportunity.")
+
+                    elif rsi["recommendation"] == "Potential SELL":
+                        st.info("📉 RSI is above 70, indicating the stock may be overbought and could face selling pressure.")
+
+                    else:
+                        st.info("⚖️ RSI is between 30 and 70, suggesting neutral market momentum.")
 
                 st.write("## 📈 Stock Price Chart")
 
                 fig = get_stock_chart(stock.upper(), period)
 
-                st.plotly_chart(fig, use_container_width=True)
+                st.plotly_chart(
+                    fig,
+                    width="stretch"
+                )
 
         else:
             st.warning("Please enter a stock symbol.")

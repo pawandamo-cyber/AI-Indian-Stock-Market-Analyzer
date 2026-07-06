@@ -86,7 +86,7 @@ def get_stock_chart(symbol, period="6mo"):
     fig.update_layout(
         title=f"{symbol} Technical Chart",
         template="plotly_white",
-        height=1200,
+        height=900,
         xaxis_rangeslider_visible=False,
         legend=dict(
             orientation="h",
@@ -99,10 +99,5 @@ def get_stock_chart(symbol, period="6mo"):
 
     fig.update_yaxes(title_text="Price (₹)", row=1, col=1)
     fig.update_yaxes(title_text="Volume", row=2, col=1)
-
-    print("Number of traces:", len(fig.data))
-
-    for trace in fig.data:
-        print(trace.type)
 
     return fig
