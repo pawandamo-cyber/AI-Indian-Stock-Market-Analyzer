@@ -1,5 +1,6 @@
 import yfinance as yf
 import plotly.graph_objects as go
+import ta
 from plotly.subplots import make_subplots
 
 
@@ -15,13 +16,29 @@ def get_stock_chart(symbol, period="6mo"):
     hist["SMA20"] = hist["Close"].rolling(20).mean()
     hist["SMA50"] = hist["Close"].rolling(50).mean()
 
+    macd = ta.trend.MACD(close=hist["Close"])
+
+    hist["MACD"] = macd.macd()
+    hist["MACD_SIGNAL"] = macd.macd_signal()
+    hist["MACD_HIST"] = macd.macd_diff()
+
     # Create two-row layout
     fig = make_subplots(
-        rows=2,
+        rows=3,
         cols=1,
         shared_xaxes=True,
-        vertical_spacing=0.03,
-        row_heights=[0.75, 0.25]
+        vertical_spacing=0.04,
+        row_heights=[0.55, 0.15, 0.30],
+        subplot_titles=(
+            "Price",
+            "Volume",
+            "MACD"
+        ),
+         specs=[
+            [{"type": "candlestick"}],
+            [{"type": "bar"}],
+            [{"type": "xy"}]
+        ]
     )
 
     # Candlestick
@@ -83,10 +100,54 @@ def get_stock_chart(symbol, period="6mo"):
         col=1
     )
 
+    # MACD Line
+    fig.add_trace(
+        go.Scatter(
+            x=hist.index,
+            y=hist["MACD"],
+            mode="lines",
+            name="MACD",
+            line=dict(color="blue", width=2)
+        ),
+        row=3,
+        col=1
+    )
+
+    # Signal Line
+    fig.add_trace(
+        go.Scatter(
+            x=hist.index,
+            y=hist["MACD_SIGNAL"],
+            mode="lines",
+            name="Signal",
+            line=dict(color="orange", width=2)
+        ),
+        row=3,
+        col=1
+    )
+
+    # MACD Histogram
+
+    colors = [
+    "green" if value >= 0 else "red"
+    for value in hist["MACD_HIST"]
+    ]
+
+    fig.add_trace(
+        go.Bar(
+            x=hist.index,
+            y=hist["MACD_HIST"],
+            marker_color=colors,
+            name="Histogram"
+        ),
+        row=3,
+        col=1
+    )
+
     fig.update_layout(
         title=f"{symbol} Technical Chart",
         template="plotly_white",
-        height=900,
+        height=1600,
         xaxis_rangeslider_visible=False,
         legend=dict(
             orientation="h",
@@ -97,5 +158,6 @@ def get_stock_chart(symbol, period="6mo"):
 
     fig.update_yaxes(title_text="Price (₹)", row=1, col=1)
     fig.update_yaxes(title_text="Volume", row=2, col=1)
+    fig.update_yaxes(title_text="MACD", row=3, col=1)
 
     return fig

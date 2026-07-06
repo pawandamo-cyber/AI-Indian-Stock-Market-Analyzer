@@ -1,6 +1,10 @@
 import streamlit as st
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
+
+print(get_stock_chart.__module__)
+print(get_stock_chart.__code__.co_filename)
+
 from services.technical_service import calculate_rsi
 from services.technical_service import calculate_macd
 
