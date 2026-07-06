@@ -1,78 +1,185 @@
 # 📈 AI Indian Stock Market Analyzer
 
-An AI-powered stock market analyzer for the Indian stock market built using Python and Streamlit.
+An AI-powered web application to analyze Indian stock market data using real-time technical indicators, interactive charts, and fundamental company information.
+
+Built with **Python**, **Streamlit**, **Plotly**, and **Yahoo Finance API**.
 
 ---
 
 ## 🚀 Features
 
-- ✅ Live NSE Stock Data
-- ✅ Interactive Candlestick Charts
-- ✅ Stock Information
-- ✅ Multiple Time Frames
-- 🔄 Technical Indicators (Coming Soon)
-- 🔄 AI Recommendation Engine (Coming Soon)
-- 🔄 Fundamental Analysis (Coming Soon)
+### 📊 Stock Analysis
+- Live NSE Stock Data
+- Company Information
+- Market Cap
+- Current Price
+- Open, High, Low, Previous Close
+- 52 Week High & Low
+- Trading Volume
+
+### 📉 Technical Analysis
+- Interactive Candlestick Chart
+- 20-Day Simple Moving Average (SMA20)
+- 50-Day Simple Moving Average (SMA50)
+- Volume Analysis
+- RSI (Relative Strength Index)
+- RSI Buy / Sell / Hold Recommendation
+- MACD Indicator
+- MACD Signal Line
+- MACD Histogram
+- MACD Buy / Sell Recommendation
+
+### 📱 Dashboard
+- Responsive Streamlit Dashboard
+- Interactive Plotly Charts
+- Adjustable Time Period Selection
+- Clean and Modern User Interface
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Technology Stack
 
-- Python
-- Streamlit
-- Plotly
-- Yahoo Finance
-- Pandas
+| Technology | Purpose |
+|------------|---------|
+| Python | Backend Development |
+| Streamlit | Web Application |
+| Plotly | Interactive Charts |
+| yFinance | Live Stock Data |
+| Pandas | Data Processing |
+| NumPy | Numerical Computation |
+| TA Library | Technical Indicators |
+| Git & GitHub | Version Control |
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
-AI_Indian_Stock_Market_Analyzer/
-
-├── app.py
-
+```
+AI_Indian_Stock_Market_Analyzer
+│
+├── assets/
+├── data/
 ├── services/
-
-│ ├── stock_service.py
-
-│ └── chart_service.py
-
+│   ├── stock_service.py
+│   ├── technical_service.py
+│   └── chart_service.py
+│
+├── app.py
 ├── requirements.txt
-
 └── README.md
+```
 
 ---
 
-## 📌 Roadmap
+# ⚙ Installation
 
-### Version 1.0 ✅
+Clone the repository
 
-- Live Dashboard
+```bash
+git clone https://github.com/pawandamo-cyber/AI-Indian-Stock-Market-Analyzer.git
+```
+
+Go to the project folder
+
+```bash
+cd AI-Indian-Stock-Market-Analyzer
+```
+
+Create a virtual environment
+
+```bash
+python -m venv .venv
+```
+
+Activate the virtual environment
+
+### Windows
+
+```bash
+.venv\Scripts\activate
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application
+
+```bash
+python -m streamlit run app.py
+```
+
+---
+
+# 📸 Current Dashboard
+
+Current modules include:
+
+- ✅ Stock Overview
+- ✅ Company Information
+- ✅ Technical Analysis
+- ✅ RSI Analysis
+- ✅ MACD Analysis
+- ✅ Interactive Candlestick Chart
+- ✅ Volume Analysis
+
+---
+
+# 🚀 Version History
+
+## Version 1.0
+- Initial Project Setup
+- Live Stock Data
+- Basic Dashboard
+
+## Version 1.1
 - Candlestick Chart
-- GitHub Integration
-
-### Version 1.1
-
-- Moving Average
+- SMA20
+- SMA50
 - Volume Analysis
 
-### Version 2.0
+## Version 1.2
+- RSI Indicator
+- Buy / Sell Recommendation
 
-- RSI
-- MACD
-- Bollinger Bands
-
-### Version 3.0
-
-- Fundamental Analysis
-
-### Version 4.0
-
-- AI Stock Recommendation
+## Version 1.3
+- MACD Indicator
+- Signal Line
+- Histogram
+- Technical Dashboard Improvements
+- Better UI
+- Performance Improvements
 
 ---
 
-## 👨‍💻 Author
+# 🔥 Upcoming Features (Version 1.4+)
 
-Pawan
+- 📊 Bollinger Bands
+- 🤖 AI Stock Recommendation (Gemini)
+- 📰 Live Financial News
+- 😊 News Sentiment Analysis
+- 📈 Portfolio Tracker
+- ⭐ Watchlist
+- 📉 Compare Multiple Stocks
+- 💹 Support & Resistance Levels
+- 📊 EMA Indicators
+- 🔔 Price Alerts
+
+---
+
+# 👨‍💻 Developer
+
+**Pawan**
+
+Technology Support Analyst | AI & GenAI Enthusiast
+
+GitHub:
+https://github.com/pawandamo-cyber
+
+---
+
+# ⭐ If you like this project
+
+Please consider giving this repository a ⭐ on GitHub.
