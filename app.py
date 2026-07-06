@@ -1,6 +1,7 @@
 import streamlit as st
 from services.stock_service import get_stock_info
 from services.chart_service_v2 import get_stock_chart
+from services.technical_service import calculate_rsi
 
 # ----------------------------
 # Page Configuration
@@ -88,6 +89,13 @@ if menu == "Home":
 
                 st.write("**Sector:**", data["Sector"])
                 st.write("**Industry:**", data["Industry"])
+
+                rsi = calculate_rsi(stock.upper(), period)
+
+                st.metric(
+                label="RSI (14)",
+                value=rsi
+                )
 
                 st.write("## 📈 Stock Price Chart")
 
