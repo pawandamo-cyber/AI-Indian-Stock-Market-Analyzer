@@ -2,6 +2,7 @@ import streamlit as st
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
 from services.technical_service import calculate_rsi
+from services.technical_service import calculate_macd
 
 # ----------------------------
 # Page Configuration
@@ -92,6 +93,8 @@ if menu == "Home":
 
                 rsi = calculate_rsi(stock.upper(), period)
 
+                macd = calculate_macd(stock.upper(), period)
+
                 st.subheader("📊 Technical Analysis")
 
                 col1, col2, col3 = st.columns(3)
@@ -132,6 +135,27 @@ if menu == "Home":
 
                     else:
                         st.info("⚖️ RSI is between 30 and 70, suggesting neutral market momentum.")
+
+                st.subheader("📈 MACD Analysis")
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric("MACD", macd["macd"])
+
+                with col2:
+                    st.metric("Signal Line", macd["signal"])
+
+                with col3:
+
+                    if macd["recommendation"] == "BUY":
+                        st.success("🟢 BUY")
+
+                    elif macd["recommendation"] == "SELL":
+                        st.error("🔴 SELL")
+
+                    else:
+                        st.warning("🟡 HOLD")        
 
                 st.write("## 📈 Stock Price Chart")
 

@@ -90,10 +90,8 @@ def get_stock_chart(symbol, period="6mo"):
         xaxis_rangeslider_visible=False,
         legend=dict(
             orientation="h",
-            yanchor="bottom",
             y=1.02,
-            xanchor="right",
-            x=1
+            x=0
         )
     )
 
