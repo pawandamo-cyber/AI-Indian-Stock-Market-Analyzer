@@ -16,6 +16,17 @@ def get_stock_chart(symbol, period="6mo"):
     hist["SMA20"] = hist["Close"].rolling(20).mean()
     hist["SMA50"] = hist["Close"].rolling(50).mean()
 
+    # Bollinger Bands
+    bb = ta.volatility.BollingerBands(
+        close=hist["Close"],
+        window=20,
+        window_dev=2
+    )
+
+    hist["BB_UPPER"] = bb.bollinger_hband()
+    hist["BB_MIDDLE"] = bb.bollinger_mavg()
+    hist["BB_LOWER"] = bb.bollinger_lband()
+
     macd = ta.trend.MACD(close=hist["Close"])
 
     hist["MACD"] = macd.macd()
@@ -65,6 +76,30 @@ def get_stock_chart(symbol, period="6mo"):
             mode="lines",
             name="20 SMA",
             line=dict(color="#2962FF", width=2)
+        ),
+        row=1,
+        col=1
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=hist.index,
+            y=hist["BB_LOWER"],
+            mode="lines",
+            name="Lower Band",
+            line=dict(color="gray", dash="dash", width=1)
+        ),
+        row=1,
+        col=1
+    )
+
+    fig.add_trace(
+        go.Scatter(
+            x=hist.index,
+            y=hist["BB_UPPER"],
+            mode="lines",
+            name="Upper Band",
+            line=dict(color="gray", dash="dash", width=1)
         ),
         row=1,
         col=1
