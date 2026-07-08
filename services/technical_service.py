@@ -75,3 +75,67 @@ def calculate_macd(symbol, period="6mo"):
         "trend": trend,
         "recommendation": recommendation
     }
+
+import ta
+import yfinance as yf
+
+
+def calculate_bollinger(symbol, period="6mo"):
+
+    stock = yf.Ticker(symbol + ".NS")
+    hist = stock.history(period=period)
+
+    if hist.empty:
+        return None
+
+    bb = ta.volatility.BollingerBands(
+        close=hist["Close"],
+        window=20,
+        window_dev=2
+    )
+
+    upper = bb.bollinger_hband().iloc[-1]
+    middle = bb.bollinger_mavg().iloc[-1]
+    lower = bb.bollinger_lband().iloc[-1]
+    price = hist["Close"].iloc[-1]
+
+    if price >= upper:
+        status = "Above Upper Band"
+        recommendation = "SELL"
+        interpretation = (
+            "Price is trading above the upper Bollinger Band. "
+            "This may indicate an overextended move. "
+            "Watch for a pullback or breakout confirmation."
+        )
+
+    elif price <= lower:
+        status = "Below Lower Band"
+        recommendation = "BUY"
+        interpretation = (
+            "Price is trading below the lower Bollinger Band. "
+            "The stock may be oversold and could rebound."
+        )
+
+    elif price > middle:
+        status = "Near Upper Band"
+        recommendation = "HOLD"
+        interpretation = (
+            "Price is above the middle band and showing bullish momentum."
+        )
+
+    else:
+        status = "Near Lower Band"
+        recommendation = "HOLD"
+        interpretation = (
+            "Price is below the middle band and showing weaker momentum."
+        )
+
+    return {
+        "price": round(price, 2),
+        "upper": round(upper, 2),
+        "middle": round(middle, 2),
+        "lower": round(lower, 2),
+        "status": status,
+        "recommendation": recommendation,
+        "interpretation": interpretation
+    }

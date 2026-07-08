@@ -1,12 +1,11 @@
 import streamlit as st
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
-
-print(get_stock_chart.__module__)
-print(get_stock_chart.__code__.co_filename)
-
-from services.technical_service import calculate_rsi
-from services.technical_service import calculate_macd
+from services.technical_service import (
+    calculate_rsi,
+    calculate_macd,
+    calculate_bollinger
+)
 
 # ----------------------------
 # Page Configuration
@@ -96,8 +95,8 @@ if menu == "Home":
                 st.write("**Industry:**", data["Industry"])
 
                 rsi = calculate_rsi(stock.upper(), period)
-
                 macd = calculate_macd(stock.upper(), period)
+                bollinger = calculate_bollinger(stock.upper(), period)
 
                 st.subheader("📊 Technical Analysis")
 
@@ -140,6 +139,38 @@ if menu == "Home":
                     else:
                         st.info("⚖️ RSI is between 30 and 70, suggesting neutral market momentum.")
 
+                st.write("## 📊 Bollinger Bands Analysis")
+
+                col1, col2, col3, col4 = st.columns(4)
+
+                with col1:
+                    st.metric("Current Price", f"₹{bollinger['price']}")
+
+                with col2:
+                    st.metric("Upper Band", f"₹{bollinger['upper']}")
+
+                with col3:
+                    st.metric("Middle Band", f"₹{bollinger['middle']}")
+
+                with col4:
+                    st.metric("Lower Band", f"₹{bollinger['lower']}")
+
+                # Status
+                st.metric("Status", bollinger["status"])
+
+                # Recommendation
+                if bollinger["recommendation"] == "BUY":
+                        st.success("🟢 BUY")
+
+                elif bollinger["recommendation"] == "SELL":
+                    st.error("🔴 SELL")
+
+                else:
+                    st.warning("🟡 HOLD")
+
+                # Interpretation
+                st.info(bollinger["interpretation"])
+
                 st.subheader("📈 MACD Analysis")
 
                 col1, col2, col3 = st.columns(3)
@@ -165,10 +196,7 @@ if menu == "Home":
 
                 fig = get_stock_chart(stock.upper(), period)
 
-                st.plotly_chart(
-                    fig,
-                    width="stretch"
-                )
+                st.plotly_chart(fig, width="stretch")
 
         else:
             st.warning("Please enter a stock symbol.")
