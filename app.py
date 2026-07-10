@@ -79,17 +79,25 @@ if menu == "Home":
                 col1, col2 = st.columns(2)
 
                 with col1:
-                    st.metric("Current Price", data["Current Price"])
-                    st.metric("Open", data["Open"])
-                    st.metric("Previous Close", data["Previous Close"])
-                    st.metric("Day High", data["Day High"])
-                    st.metric("Day Low", data["Day Low"])
+                    st.metric("Current Price", f"₹{data['Current Price']:.2f}")
+                    st.metric("Open", f"₹{data['Open']:.2f}")
+                    st.metric("Previous Close", f"₹{data['Previous Close']:.2f}")
+                    st.metric("Day High", f"₹{data['Day High']:.2f}")
+                    st.metric("Day Low", f"₹{data['Day Low']:.2f}")
 
                 with col2:
-                    st.metric("52 Week High", data["52 Week High"])
-                    st.metric("52 Week Low", data["52 Week Low"])
-                    st.metric("Volume", data["Volume"])
-                    st.metric("Market Cap", data["Market Cap"])
+                    st.metric("52 Week High", f"₹{data['52 Week High']:.2f}")
+                    st.metric("52 Week Low", f"₹{data['52 Week Low']:.2f}")
+
+                    st.metric("Volume", f"{data['Volume']:,}")
+
+                    market_cap = data["Market Cap"]
+
+                    if market_cap:
+                        market_cap = market_cap / 1e12
+                        market_cap = f"₹{market_cap:.2f} Trillion"
+
+                    st.metric("Market Cap", market_cap)
 
                 st.write("### Company Information")
 
@@ -163,7 +171,7 @@ if menu == "Home":
                 st.subheader("🤖 AI Stock Advisor")
 
                 with st.spinner("🤖 Gemini is analyzing the stock..."):
-                    st.success(ai_summary)    
+                    st.markdown(ai_summary)    
                     
                 st.subheader("📈 RSI Analysis")    
 
@@ -209,16 +217,16 @@ if menu == "Home":
                 col1, col2, col3, col4 = st.columns(4)
 
                 with col1:
-                    st.metric("Current Price", f"₹{bollinger['price']}")
+                    st.metric("Current Price", f"₹{bollinger['price']:.2f}")
 
                 with col2:
-                    st.metric("Upper Band", f"₹{bollinger['upper']}")
+                    st.metric("Upper Band", f"₹{bollinger['upper']:.2f}")
 
                 with col3:
-                    st.metric("Middle Band", f"₹{bollinger['middle']}")
+                    st.metric("Middle Band", f"₹{bollinger['middle']:.2f}")
 
                 with col4:
-                    st.metric("Lower Band", f"₹{bollinger['lower']}")
+                    st.metric("Lower Band", f"₹{bollinger['lower']:.2f}")
 
                 # Status
                 st.metric("Status", bollinger["status"])

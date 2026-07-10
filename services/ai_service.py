@@ -12,41 +12,69 @@ model = genai.GenerativeModel("gemini-2.5-flash")
 def generate_ai_summary(stock, company, rsi, macd, bollinger, overall):
 
     prompt = f"""
-You are an expert Indian Stock Market Technical Analyst.
+You are a Senior Indian Stock Market Technical Analyst.
 
-Stock: {stock}
+Analyze the following technical indicators and provide a professional stock analysis.
+
+Stock Symbol: {stock}
 Company: {company}
 
-RSI:
-Value: {rsi['value']}
-Signal: {rsi['signal']}
-Recommendation: {rsi['recommendation']}
+Technical Indicators
 
-MACD:
-Value: {macd['macd']}
-Signal Line: {macd['signal']}
-Recommendation: {macd['recommendation']}
+RSI
+- Value: {rsi['value']}
+- Signal: {rsi['signal']}
+- Recommendation: {rsi['recommendation']}
 
-Bollinger Bands:
-Status: {bollinger['status']}
-Recommendation: {bollinger['recommendation']}
+MACD
+- MACD: {macd['macd']}
+- Signal Line: {macd['signal']}
+- Recommendation: {macd['recommendation']}
 
-Overall Technical Score:
-{overall['score']}/6
+Bollinger Bands
+- Status: {bollinger['status']}
+- Recommendation: {bollinger['recommendation']}
 
-Confidence:
-{overall['confidence']}%
+Overall Technical Score
+- Score: {overall['score']} / 6
+- Confidence: {overall['confidence']}%
+- Recommendation: {overall['recommendation']}
 
-Overall Recommendation:
-{overall['recommendation']}
+Provide your response in the following format.
 
-Provide:
-1. Overall trend
-2. Technical interpretation
-3. Risks
-4. Short-term outlook
+## 📈 Overall Trend
 
-Limit to about 120 words.
+(One short paragraph)
+
+## ✅ Bullish Signals
+
+- Point 1
+- Point 2
+- Point 3
+
+## ⚠️ Risks
+
+- Point 1
+- Point 2
+
+## 📅 Short-Term Outlook
+
+(2-3 sentences)
+
+## 🎯 Final Recommendation
+
+Recommendation: BUY / HOLD / SELL
+
+Confidence: XX%
+
+One-line conclusion.
+
+Rules
+
+- Keep the response under 200 words.
+- Do not mention that you are an AI.
+- Base the analysis only on the provided indicators.
+- Use simple language suitable for beginner investors.
 """
 
     try:

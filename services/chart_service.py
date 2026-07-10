@@ -1,9 +1,10 @@
+import streamlit as st
 import yfinance as yf
 import plotly.graph_objects as go
 import ta
 from plotly.subplots import make_subplots
 
-
+@st.cache_data(ttl=300)
 def get_stock_chart(symbol, period="6mo"):
 
     stock = yf.Ticker(symbol + ".NS")

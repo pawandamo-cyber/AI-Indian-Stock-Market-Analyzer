@@ -1,5 +1,7 @@
+import streamlit as st
 import yfinance as yf
 
+@st.cache_data(ttl=300)
 def get_stock_info(symbol):
 
     try:

@@ -1,6 +1,8 @@
+import streamlit as st
 import yfinance as yf
 import ta
 
+@st.cache_data(ttl=300)
 def calculate_rsi(symbol, period="6mo"):
     """
     Calculate the latest RSI (14) value and its interpretation.
@@ -38,6 +40,7 @@ def calculate_rsi(symbol, period="6mo"):
         "recommendation": recommendation
     }
 
+@st.cache_data(ttl=300)
 def calculate_macd(symbol, period="6mo"):
     """
     Calculate MACD indicator and signal.
@@ -80,6 +83,7 @@ import ta
 import yfinance as yf
 
 
+@st.cache_data(ttl=300)
 def calculate_bollinger(symbol, period="6mo"):
 
     stock = yf.Ticker(symbol + ".NS")
