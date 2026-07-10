@@ -1,11 +1,13 @@
 import streamlit as st
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
+from services.ai_service import generate_ai_summary
 from services.technical_service import (
     calculate_rsi,
     calculate_macd,
-    calculate_bollinger
-)
+    calculate_bollinger,
+    calculate_overall_score
+)  
 
 # ----------------------------
 # Page Configuration
@@ -98,9 +100,72 @@ if menu == "Home":
                 macd = calculate_macd(stock.upper(), period)
                 bollinger = calculate_bollinger(stock.upper(), period)
 
+                overall = calculate_overall_score(
+                    rsi,
+                    macd,
+                    bollinger
+                )
+
+                ai_summary = generate_ai_summary(
+                    stock=stock.upper(),
+                    company=data["Company Name"],
+                    rsi=rsi,
+                    macd=macd,
+                    bollinger=bollinger,
+                    overall=overall
+                )
+
+                # Star Rating
+               
                 st.subheader("📊 Technical Analysis")
 
+                st.subheader("🧠 AI Technical Score")
+
                 col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric("Technical Score", overall["stars"])
+
+                with col2:
+                    st.metric("Confidence", f"{overall['confidence']}%")
+                    st.progress(overall["confidence"] / 100)
+
+                with col3:
+                    st.metric("Recommendation", overall["recommendation"])
+
+                if overall["recommendation"] == "BUY":
+                    st.success("🟢 Overall Recommendation: BUY")
+
+                elif overall["recommendation"] == "SELL":
+                    st.error("🔴 Overall Recommendation: SELL")
+
+                else:
+                    st.warning("🟡 Overall Recommendation: HOLD")
+
+                if overall["recommendation"] == "BUY":
+                    st.info(
+                        "📈 Technical indicators are mostly bullish. "
+                        "The stock is showing positive momentum."
+                    )
+
+                elif overall["recommendation"] == "SELL":
+                    st.info(
+                        "📉 Technical indicators suggest weakness. "
+                        "Consider waiting for confirmation."
+            )
+
+                else:
+                    st.info(
+                        "⚖️ Technical indicators are mixed. "
+                        "Wait for stronger confirmation before taking action."
+            )
+                    
+                st.subheader("🤖 AI Stock Advisor")
+
+                with st.spinner("🤖 Gemini is analyzing the stock..."):
+                    st.success(ai_summary)    
+                    
+                st.subheader("📈 RSI Analysis")    
 
                 with col1:
                     st.metric("RSI (14)", rsi["value"])
@@ -121,19 +186,19 @@ if menu == "Home":
 
                     st.write("### Recommendation")
 
-                if rsi["recommendation"] == "Potential BUY":
+                if rsi["recommendation"] == "BUY":
                     st.success("🟢 BUY")
 
-                elif rsi["recommendation"] == "Potential SELL":
+                elif rsi["recommendation"] == "SELL":
                     st.error("🔴 SELL")
 
                 else:
                     st.warning("🟡 HOLD")
 
-                    if rsi["recommendation"] == "Potential BUY":
+                    if rsi["recommendation"] == "BUY":
                         st.info("📈 RSI is below 30, indicating the stock may be oversold and could present a buying opportunity.")
 
-                    elif rsi["recommendation"] == "Potential SELL":
+                    elif rsi["recommendation"] == "SELL":
                         st.info("📉 RSI is above 70, indicating the stock may be overbought and could face selling pressure.")
 
                     else:

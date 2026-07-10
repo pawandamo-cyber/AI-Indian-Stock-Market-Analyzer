@@ -85,6 +85,9 @@ def calculate_bollinger(symbol, period="6mo"):
     stock = yf.Ticker(symbol + ".NS")
     hist = stock.history(period=period)
 
+    # Remove rows where Close is missing
+    hist = hist.dropna(subset=["Close"])
+
     if hist.empty:
         return None
 
@@ -130,6 +133,10 @@ def calculate_bollinger(symbol, period="6mo"):
             "Price is below the middle band and showing weaker momentum."
         )
 
+        upper = round(bb.bollinger_hband().iloc[-1], 2)
+        middle = round(bb.bollinger_mavg().iloc[-1], 2)
+        lower = round(bb.bollinger_lband().iloc[-1], 2)
+
     return {
         "price": round(price, 2),
         "upper": round(upper, 2),
@@ -138,4 +145,50 @@ def calculate_bollinger(symbol, period="6mo"):
         "status": status,
         "recommendation": recommendation,
         "interpretation": interpretation
+    }
+
+def calculate_overall_score(rsi, macd, bollinger):
+
+    score = 0
+
+    # RSI
+    if rsi["recommendation"] == "BUY":
+        score += 2
+    elif rsi["recommendation"] == "HOLD":
+        score += 1
+
+    # MACD
+    if macd["recommendation"] == "BUY":
+        score += 2
+    elif macd["recommendation"] == "HOLD":
+        score += 1
+
+    # Bollinger
+    if bollinger["recommendation"] == "BUY":
+        score += 2
+    elif bollinger["recommendation"] == "HOLD":
+        score += 1
+
+    # Overall Recommendation
+    if score >= 5:
+        recommendation = "BUY"
+        color = "green"
+
+    elif score >= 3:
+        recommendation = "HOLD"
+        color = "orange"
+
+    else:
+        recommendation = "SELL"
+        color = "red"
+
+    confidence = round((score / 6) * 100)
+    stars = "⭐" * score + "☆" * (6 - score)
+
+    return {
+        "score": score,
+        "confidence": confidence,
+        "recommendation": recommendation,
+        "color": color,
+        "stars": stars
     }

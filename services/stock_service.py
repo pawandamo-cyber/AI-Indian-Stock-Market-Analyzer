@@ -8,6 +8,7 @@ def get_stock_info(symbol):
         info = stock.info
 
         return {
+            "Company Name": info.get("longName", symbol),
             "Current Price": info.get("currentPrice"),
             "Open": info.get("open"),
             "Previous Close": info.get("previousClose"),
@@ -19,7 +20,7 @@ def get_stock_info(symbol):
             "Volume": info.get("volume"),
             "Sector": info.get("sector"),
             "Industry": info.get("industry"),
-        }
+    }
 
     except Exception as e:
         return {"Error": str(e)}
