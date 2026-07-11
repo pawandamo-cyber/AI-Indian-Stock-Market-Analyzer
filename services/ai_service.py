@@ -8,18 +8,24 @@ genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-
-def generate_ai_summary(stock, company, rsi, macd, bollinger, overall):
+def generate_ai_summary(stock, company, rsi, macd, bollinger, overall, news):
 
     prompt = f"""
-You are a Senior Indian Stock Market Technical Analyst.
+You are a Senior Indian Stock Market Analyst specializing in Indian equities.
 
-Analyze the following technical indicators and provide a professional stock analysis.
+Your task is to combine BOTH technical indicators and the latest company news
+to produce an intelligent stock analysis.
 
-Stock Symbol: {stock}
-Company: {company}
+=================================================
 
-Technical Indicators
+Stock Symbol:
+{stock}
+
+Company:
+{company}
+
+=================================================
+TECHNICAL ANALYSIS
 
 RSI
 - Value: {rsi['value']}
@@ -27,7 +33,7 @@ RSI
 - Recommendation: {rsi['recommendation']}
 
 MACD
-- MACD: {macd['macd']}
+- Value: {macd['macd']}
 - Signal Line: {macd['signal']}
 - Recommendation: {macd['recommendation']}
 
@@ -36,45 +42,80 @@ Bollinger Bands
 - Recommendation: {bollinger['recommendation']}
 
 Overall Technical Score
-- Score: {overall['score']} / 6
-- Confidence: {overall['confidence']}%
-- Recommendation: {overall['recommendation']}
 
-Provide your response in the following format.
+Score:
+{overall['score']} / 6
 
-## 📈 Overall Trend
+Confidence:
+{overall['confidence']}%
 
-(One short paragraph)
+Technical Recommendation:
+{overall['recommendation']}
 
-## ✅ Bullish Signals
+=================================================
+LATEST NEWS
 
-- Point 1
-- Point 2
-- Point 3
+{news}
 
-## ⚠️ Risks
+=================================================
 
-- Point 1
-- Point 2
+Generate a professional report using the following format.
 
-## 📅 Short-Term Outlook
+# 🤖 Overall Market Sentiment
 
-(2-3 sentences)
+State whether the overall outlook is:
 
-## 🎯 Final Recommendation
+Bullish
 
-Recommendation: BUY / HOLD / SELL
+Bearish
 
-Confidence: XX%
+Neutral
 
-One-line conclusion.
+Explain in 2-3 sentences.
+
+# 📈 Technical Analysis
+
+Summarize what the technical indicators suggest.
+
+# 📰 News Impact
+
+Analyse the latest news.
+
+Mention whether the news is:
+
+Positive
+
+Negative
+
+Neutral
+
+Explain WHY.
+
+# ⚠️ Risk Factors
+
+Mention 2-3 important risks.
+
+# 📅 Short-Term Outlook
+
+Provide a short outlook for the next few trading sessions.
+
+# 🎯 Final Recommendation
+
+Recommendation:
+BUY / HOLD / SELL
+
+Confidence:
+XX%
+
+Give a one-line investment conclusion.
 
 Rules
 
-- Keep the response under 200 words.
+- Keep the report under 300 words.
+- Use markdown headings.
 - Do not mention that you are an AI.
-- Base the analysis only on the provided indicators.
-- Use simple language suitable for beginner investors.
+- Combine BOTH technical indicators and news.
+- If news is limited, mention that technical indicators were given more weight.
 """
 
     try:

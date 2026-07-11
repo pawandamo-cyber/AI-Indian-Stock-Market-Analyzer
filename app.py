@@ -1,13 +1,9 @@
 import streamlit as st
+from services.news_service import (get_stock_news, format_news_for_ai)
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
 from services.ai_service import generate_ai_summary
-from services.technical_service import (
-    calculate_rsi,
-    calculate_macd,
-    calculate_bollinger,
-    calculate_overall_score
-)  
+from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)  
 
 # ----------------------------
 # Page Configuration
@@ -69,6 +65,10 @@ if menu == "Home":
 
             data = get_stock_info(stock.upper())
 
+            news = get_stock_news(stock.upper())
+
+            formatted_news = format_news_for_ai(news)
+
             if "Error" in data:
                 st.error(data["Error"])
 
@@ -120,12 +120,63 @@ if menu == "Home":
                     rsi=rsi,
                     macd=macd,
                     bollinger=bollinger,
-                    overall=overall
+                    overall=overall,
+                    news=formatted_news
                 )
+
+                st.divider()
+
+                st.subheader("🤖 AI Verdict")
+
+                col1, col2 = st.columns([1, 2])
+
+                with col1:
+
+                    if overall["recommendation"] == "BUY":
+                        st.success("🟢 BUY")
+
+                    elif overall["recommendation"] == "SELL":
+                        st.error("🔴 SELL")
+
+                    else:
+                        st.warning("🟡 HOLD")
+
+                    st.metric(
+                        "Confidence",
+                        f"{overall['confidence']}%"
+                    )
+
+                    st.metric(
+                        "Technical Score",
+                        overall["stars"]
+                    )
+
+                with col2:
+
+                    st.info(
+                        f"""
+                ### AI Recommendation
+
+                **Recommendation:** {overall['recommendation']}
+
+                **Confidence:** {overall['confidence']}%
+
+                The recommendation is based on the combined analysis of
+                RSI, MACD, and Bollinger Bands.
+
+                *A more detailed AI explanation is available below.*
+                """
+                    )
 
                 # Star Rating
                
                 st.subheader("📊 Technical Analysis")
+
+                st.write("## 📈 Stock Price Chart")
+
+                fig = get_stock_chart(stock.upper(), period)
+
+                st.plotly_chart(fig, width="stretch")
 
                 st.subheader("🧠 AI Technical Score")
 
@@ -166,8 +217,27 @@ if menu == "Home":
                     st.info(
                         "⚖️ Technical indicators are mixed. "
                         "Wait for stronger confirmation before taking action."
-            )
-                    
+                    )
+
+                st.subheader("📰 Latest News")
+
+                for article in news:
+
+                    with st.container():
+
+                        st.markdown(f"### 📰 {article['title']}")
+
+                        st.caption(
+                            f"{article['source']} • {article['published']}"
+                        )
+
+                        st.link_button(
+                            "🔗 Read Full Article",
+                            article["link"]
+                        )
+
+                        st.divider()
+
                 st.subheader("🤖 AI Stock Advisor")
 
                 with st.spinner("🤖 Gemini is analyzing the stock..."):
@@ -212,6 +282,27 @@ if menu == "Home":
                     else:
                         st.info("⚖️ RSI is between 30 and 70, suggesting neutral market momentum.")
 
+                st.subheader("📈 MACD Analysis")
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric("MACD", macd["macd"])
+
+                with col2:
+                    st.metric("Signal Line", macd["signal"])
+
+                with col3:
+
+                    if macd["recommendation"] == "BUY":
+                        st.success("🟢 BUY")
+
+                    elif macd["recommendation"] == "SELL":
+                        st.error("🔴 SELL")
+
+                    else:
+                        st.warning("🟡 HOLD")        
+
                 st.write("## 📊 Bollinger Bands Analysis")
 
                 col1, col2, col3, col4 = st.columns(4)
@@ -243,33 +334,6 @@ if menu == "Home":
 
                 # Interpretation
                 st.info(bollinger["interpretation"])
-
-                st.subheader("📈 MACD Analysis")
-
-                col1, col2, col3 = st.columns(3)
-
-                with col1:
-                    st.metric("MACD", macd["macd"])
-
-                with col2:
-                    st.metric("Signal Line", macd["signal"])
-
-                with col3:
-
-                    if macd["recommendation"] == "BUY":
-                        st.success("🟢 BUY")
-
-                    elif macd["recommendation"] == "SELL":
-                        st.error("🔴 SELL")
-
-                    else:
-                        st.warning("🟡 HOLD")        
-
-                st.write("## 📈 Stock Price Chart")
-
-                fig = get_stock_chart(stock.upper(), period)
-
-                st.plotly_chart(fig, width="stretch")
 
         else:
             st.warning("Please enter a stock symbol.")

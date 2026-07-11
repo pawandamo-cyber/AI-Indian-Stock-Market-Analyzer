@@ -167,6 +167,15 @@ Current modules include:
 - 📊 EMA Indicators
 - 🔔 Price Alerts
 
+## Latest Features (v1.8)
+
+- AI Verdict Dashboard
+- Interactive Technical Charts
+- Google News Integration
+- AI Market Intelligence
+- Professional Technical Analysis
+- Modular Service Architecture
+
 ---
 
 # 👨‍💻 Developer
