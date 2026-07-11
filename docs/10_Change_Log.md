@@ -462,6 +462,52 @@ Technical Indicators
         ▼
 AI Market Intelligence
 
+# Change Log
+
+---
+
+## Version 1.8.0
+**Date:** 11 July 2026
+
+### Added
+- Fundamental Analysis section
+- PE Ratio
+- Forward PE
+- EPS
+- Book Value
+- Price to Book Ratio
+- Dividend Yield
+- Return on Equity (ROE)
+- Debt to Equity Ratio
+- Profit Margin
+- Revenue Growth
+
+### Improved
+- Enhanced AI prompt to combine technical indicators with company news.
+- Added AI Verdict dashboard.
+- Improved application workflow by repositioning the stock chart.
+- Improved handling of missing financial values using `is not None`.
+- Updated README with latest project features.
+
+### Fixed
+- Fixed syntax errors after dashboard restructuring.
+- Fixed indentation issues in `app.py`.
+- Fixed duplicate AI processing approach.
+- Corrected technical analysis section ordering.
+
+### Removed
+- Removed standalone AI News Sentiment implementation.
+- Removed duplicate Gemini API call.
+- Removed temporary Compare Stocks implementation for redesign.
+
+### Deferred
+- Market Analysis module
+- News module
+- Portfolio module
+- Compare Stocks redesign
+- UI enhancements
+- Deployment
+
 ---
 
 Last Updated

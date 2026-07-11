@@ -124,3 +124,4 @@ Rules
 
     except Exception as e:
         return f"AI Error: {e}"
+    

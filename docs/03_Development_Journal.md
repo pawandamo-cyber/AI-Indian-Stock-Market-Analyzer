@@ -1109,3 +1109,52 @@ Always use
 ## Status
 
 ✅ Resolved
+
+# Development Journal
+
+## Date
+11 July 2026
+
+## Version
+v1.8.0
+
+## Sprint
+Sprint 2 - AI Intelligence & Fundamental Analysis
+
+### Completed
+
+- Added AI Verdict Dashboard
+- Improved application workflow
+- Moved Stock Price Chart higher in the dashboard
+- Connected Google News to the AI summary pipeline
+- Enhanced Gemini prompt to analyze both technical indicators and latest company news
+- Added Fundamental Analysis module
+- Added the following financial metrics:
+  - PE Ratio
+  - Forward PE
+  - EPS
+  - Book Value
+  - Price to Book
+  - Dividend Yield
+  - ROE
+  - Debt to Equity
+  - Profit Margin
+  - Revenue Growth
+- Improved handling of missing values using `is not None`
+- Fixed multiple syntax and indentation issues during dashboard restructuring
+
+### Deferred
+
+- AI News Sentiment Engine
+  - Decided to remove the separate Gemini call.
+  - The functionality will be merged into the main AI analysis to reduce API calls and improve performance.
+
+- Compare Stocks
+  - Initial implementation tested.
+  - Deferred for a future release due to limited user value compared to remaining modules.
+
+### Next Sprint
+
+- Market Analysis
+- Global Market News
+- Portfolio Module

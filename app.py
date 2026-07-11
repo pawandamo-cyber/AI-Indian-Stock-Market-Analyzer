@@ -65,6 +65,8 @@ if menu == "Home":
 
             data = get_stock_info(stock.upper())
 
+            #st.write(data)      # Temporary for testing
+
             news = get_stock_news(stock.upper())
 
             formatted_news = format_news_for_ai(news)
@@ -103,6 +105,75 @@ if menu == "Home":
 
                 st.write("**Sector:**", data["Sector"])
                 st.write("**Industry:**", data["Industry"])
+
+                # ==========================================
+                # Fundamental Analysis
+                # ==========================================
+
+                st.subheader("📊 Fundamental Analysis")
+
+                col1, col2 = st.columns(2)
+
+                with col1:
+
+                    st.metric(
+                        "PE Ratio",
+                        f"{data['PE Ratio']:.2f}" if data["PE Ratio"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "EPS",
+                        f"{data['EPS']:.2f}" if data["EPS"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "Book Value",
+                        f"{data['Book Value']:.2f}" if data["Book Value"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "Price / Book",
+                        f"{data['Price to Book']:.2f}" if data["Price to Book"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "Dividend Yield",
+                        f"{data['Dividend Yield']:.2f}%"
+                        if data["Dividend Yield"] is not None else "N/A"
+                    )
+
+                with col2:
+
+                    st.metric(
+                        "Forward PE",
+                        f"{data['Forward PE']:.2f}" if data["Forward PE"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "ROE",
+                        f"{data['ROE']*100:.2f}%"
+                        if data["ROE"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "Debt to Equity",
+                        f"{data['Debt to Equity']:.2f}"
+                        if data["Debt to Equity"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "Profit Margin",
+                        f"{data['Profit Margin']*100:.2f}%"
+                        if data["Profit Margin"] is not None else "N/A"
+                    )
+
+                    st.metric(
+                        "Revenue Growth",
+                        f"{data['Revenue Growth']*100:.2f}%"
+                        if data["Revenue Growth"] is not None else "N/A"
+                    )
+
+                st.divider()
 
                 rsi = calculate_rsi(stock.upper(), period)
                 macd = calculate_macd(stock.upper(), period)
@@ -350,3 +421,37 @@ if menu == "Home":
 
     with col3:
         st.metric("BANK NIFTY", "--")
+
+# ==========================================
+# Compare Stocks
+# ==========================================
+
+elif menu == "Compare Stocks":
+
+    st.title("📊 Compare Two Stocks")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        stock1 = st.text_input(
+            "Stock 1",
+            placeholder="Example: TCS"
+        )
+
+    with col2:
+        stock2 = st.text_input(
+            "Stock 2",
+            placeholder="Example: INFY"
+        )
+
+    if st.button("Compare"):
+
+        if stock1 and stock2:
+
+            data1 = get_stock_info(stock1.upper())
+            data2 = get_stock_info(stock2.upper())
+
+            st.subheader("Comparison")
+
+        else:
+            st.warning("Please enter both stock symbols.")

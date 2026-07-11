@@ -384,3 +384,33 @@ July 2026
 - Fixed indentation issues after layout refactor
 - Fixed unclosed parenthesis syntax error
 - Corrected technical indicator display order
+
+# Release Notes
+
+## Version v1.8.0
+
+### New Features
+
+- AI Verdict Dashboard
+- Fundamental Analysis
+- AI prompt enhanced with company news
+- Google News integrated into AI workflow
+- Professional dashboard flow
+
+### Improvements
+
+- Better dashboard layout
+- Improved AI recommendation quality
+- Better handling of unavailable financial data
+
+### Bug Fixes
+
+- Fixed syntax errors
+- Fixed indentation issues
+- Fixed dashboard rendering issues
+- Improved chart placement
+
+### Deferred
+
+- Compare Stocks
+- AI News Sentiment Engine

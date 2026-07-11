@@ -22,7 +22,19 @@ def get_stock_info(symbol):
             "Volume": info.get("volume"),
             "Sector": info.get("sector"),
             "Industry": info.get("industry"),
-    }
 
+            # Fundamental Metrics
+            "PE Ratio": info.get("trailingPE"),
+            "Forward PE": info.get("forwardPE"),
+            "EPS": info.get("trailingEps"),
+            "Book Value": info.get("bookValue"),
+            "Price to Book": info.get("priceToBook"),
+            "Dividend Yield": info.get("dividendYield"),
+            "ROE": info.get("returnOnEquity"),
+            "Debt to Equity": info.get("debtToEquity"),
+            "Profit Margin": info.get("profitMargins"),
+            "Revenue Growth": info.get("revenueGrowth"),
+        }
+    
     except Exception as e:
         return {"Error": str(e)}

@@ -225,6 +225,13 @@ AI_Indian_Stock_Market_Analyzer/
 
 ---
 
+Latest Features
+
+- Fundamental Analysis
+- AI Verdict
+- Google News Integration
+- AI Market Intelligence
+
 ## 🔄 Upcoming Features
 
 ### Version 1.9
