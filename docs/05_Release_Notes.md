@@ -414,3 +414,28 @@ July 2026
 
 - Compare Stocks
 - AI News Sentiment Engine
+
+## Version 1.8
+
+This release focuses on improving the intelligence layer of the application.
+
+### Highlights
+
+- Live Market Ticker
+- AI Stock Advisor improvements
+- AI + News integration
+- Fundamental Analysis enhancements
+- Better project architecture
+- Navigation cleanup
+
+### Performance
+
+- Cached technical indicators
+- Optimized Yahoo Finance requests
+- Reduced redundant calculations
+
+### Known Issues
+
+- MACD requires final validation
+- Market Analysis module under development
+- Compare Stocks module under development

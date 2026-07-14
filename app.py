@@ -1,7 +1,10 @@
 import streamlit as st
+from streamlit_autorefresh import st_autorefresh
 from services.news_service import (get_stock_news, format_news_for_ai)
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
+from services.market_service import (get_market_indices, get_market_mood)
+from services.market_ticker_service import (get_live_indices, render_market_ticker)
 from services.ai_service import generate_ai_summary
 from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)  
 
@@ -14,6 +17,13 @@ st.set_page_config(
     layout="wide"
 )
 
+st_autorefresh(
+    interval=60000,   # Refresh every 60 seconds
+    key="market_refresh"
+)
+
+market_indices = get_live_indices()
+
 # ----------------------------
 # Sidebar
 # ----------------------------
@@ -24,8 +34,6 @@ menu = st.sidebar.radio(
     [
         "Home",
         "Market Analysis",
-        "Technical Analysis",
-        "Fundamental Analysis",
         "Compare Stocks",
         "News",
         "Portfolio"
@@ -36,6 +44,24 @@ menu = st.sidebar.radio(
 # Home Page
 # ----------------------------
 if menu == "Home":
+
+    if market_indices:
+
+        cols = st.columns(len(market_indices))
+
+        for col, (name, data) in zip(cols, market_indices.items()):
+
+            with col:
+
+                delta = f"{data['change']} ({data['percent']}%)"
+
+                st.metric(
+                    label=name,
+                    value=data["price"],
+                    delta=delta
+                )
+
+        st.divider()
 
     st.title("📈 AI Indian Stock Market Analyzer")
 
@@ -409,18 +435,53 @@ if menu == "Home":
         else:
             st.warning("Please enter a stock symbol.")
 
-    st.divider()
+# =====================================================
+# END OF HOME PAGE
+# =====================================================
+
+# ==========================================
+# Market Analysis
+# ==========================================
+
+elif menu == "Market Analysis":
+
+    st.title("📈 Indian Market Analysis")
+
+    st.write("DEBUG: Market Analysis Page Loaded")
+
+    market = get_market_indices()
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        st.metric("NIFTY 50", "--")
 
-    with col2:
-        st.metric("SENSEX", "--")
+            nifty = market["NIFTY 50"]
 
-    with col3:
-        st.metric("BANK NIFTY", "--")
+            st.metric(
+                "NIFTY 50",
+                nifty["current"],
+                f"{nifty['change']} ({nifty['change_percent']}%)"
+        )
+
+            with col2:
+
+                sensex = market["SENSEX"]
+
+                st.metric(
+                "SENSEX",
+                sensex["current"],
+                f"{sensex['change']} ({sensex['change_percent']}%)"
+            )
+
+            with col3:
+
+                bank = market["BANK NIFTY"]
+
+                st.metric(
+                "BANK NIFTY",
+                bank["current"],
+                f"{bank['change']} ({bank['change_percent']}%)"
+        )
 
 # ==========================================
 # Compare Stocks

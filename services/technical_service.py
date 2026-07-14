@@ -47,7 +47,8 @@ def calculate_macd(symbol, period="6mo"):
     """
 
     stock = yf.Ticker(symbol + ".NS")
-    hist = stock.history(period=period)
+    # Always download enough data for MACD calculation
+    hist = stock.history(period="6mo")
 
     if hist.empty:
         return None
@@ -56,6 +57,17 @@ def calculate_macd(symbol, period="6mo"):
 
     hist["MACD"] = macd.macd()
     hist["Signal"] = macd.macd_signal()
+
+    # Remove rows where MACD or Signal is NaN
+    hist = hist.dropna(subset=["MACD", "Signal"])
+
+    if hist.empty:
+        return {
+            "macd": 0.0,
+            "signal": 0.0,
+            "trend": "⚪ Not Available",
+            "recommendation": "HOLD"
+        }
 
     latest_macd = round(hist["MACD"].iloc[-1], 2)
     latest_signal = round(hist["Signal"].iloc[-1], 2)
@@ -78,10 +90,6 @@ def calculate_macd(symbol, period="6mo"):
         "trend": trend,
         "recommendation": recommendation
     }
-
-import ta
-import yfinance as yf
-
 
 @st.cache_data(ttl=300)
 def calculate_bollinger(symbol, period="6mo"):
@@ -137,9 +145,9 @@ def calculate_bollinger(symbol, period="6mo"):
             "Price is below the middle band and showing weaker momentum."
         )
 
-        upper = round(bb.bollinger_hband().iloc[-1], 2)
-        middle = round(bb.bollinger_mavg().iloc[-1], 2)
-        lower = round(bb.bollinger_lband().iloc[-1], 2)
+        upper = round(bb.bollinger_hband().iloc[-1])
+        middle = round(bb.bollinger_mavg().iloc[-1])
+        lower = round(bb.bollinger_lband().iloc[-1])
 
     return {
         "price": round(price, 2),

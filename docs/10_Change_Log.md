@@ -508,6 +508,54 @@ AI Market Intelligence
 - UI enhancements
 - Deployment
 
+## Version 1.8 (Sprint 2)
+Release Date: July 2026
+
+### ✨ New Features
+
+- Added Live Market Ticker
+  - NIFTY 50
+  - SENSEX
+  - BANK NIFTY
+  - NIFTY IT
+  - NIFTY AUTO
+
+- Added reusable `market_ticker_service.py`
+
+- Integrated live market data using Yahoo Finance
+
+- Added automatic market refresh support
+
+- Added AI + News integration improvements
+
+- Improved Fundamental Analysis section
+
+- Improved AI Verdict module
+
+- Improved News display with source and published date
+
+### 🛠 Improvements
+
+- Cleaned application navigation
+- Removed duplicate Technical Analysis page
+- Removed duplicate Fundamental Analysis page
+- Improved project architecture
+- Improved service separation
+
+### 🐞 Bug Fixes
+
+- Fixed missing Fundamental metrics
+- Improved None handling for financial data
+- Started MACD stability improvements
+- Cleaned duplicate imports in technical_service.py
+
+### 🚧 In Progress
+
+- Market Analysis Module
+- Compare Stocks Module
+- Portfolio Module
+- News Dashboard
+
 ---
 
 Last Updated

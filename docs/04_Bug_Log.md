@@ -591,6 +591,59 @@ Before investigating any issue:
 - Ensure API keys are loaded from .env
 - Verify Git status before pushing
 
+## BUG-011
+
+### Title
+MACD displayed `NaN`
+
+### Status
+In Progress
+
+### Root Cause
+
+The MACD indicator used the user-selected chart period. Short periods (e.g., 1 month) did not provide enough historical candles for EMA(12), EMA(26), and Signal calculations, resulting in `NaN` values.
+
+### Fix
+
+- Always fetch sufficient historical data (6 months) for MACD.
+- Drop rows with `NaN` before reading the latest MACD and Signal values.
+
+---
+
+## BUG-012
+
+### Title
+Duplicate imports in `technical_service.py`
+
+### Status
+Resolved
+
+### Root Cause
+
+`ta` and `yfinance` were imported twice in the same file.
+
+### Resolution
+
+Removed duplicate imports and retained a single import section at the top.
+
+---
+
+## BUG-013
+
+### Title
+Market ticker auto-refresh module not found
+
+### Status
+Resolved
+
+### Root Cause
+
+`streamlit-autorefresh` package was not installed in the active virtual environment.
+
+### Resolution
+
+Installed the package in the project virtual environment and verified the correct Python interpreter.
+
 ---
 
 # End of Bug Log

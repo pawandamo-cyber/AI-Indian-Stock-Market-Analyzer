@@ -619,3 +619,19 @@ but to become a better software engineer through the process.
 Last Updated
 
 July 2026
+
+## Lesson
+
+Do not couple technical indicator calculations with chart display periods.
+
+Indicators such as MACD should always use sufficient historical data, regardless of the chart duration selected by the user.
+
+---
+
+## Lesson
+
+Develop one feature at a time using the workflow:
+
+Build → Test → Integrate → Verify
+
+This reduces debugging complexity and improves stability.

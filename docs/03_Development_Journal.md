@@ -1158,3 +1158,49 @@ Sprint 2 - AI Intelligence & Fundamental Analysis
 - Market Analysis
 - Global Market News
 - Portfolio Module
+
+## Sprint 2 – Live Market Integration & Technical Enhancements
+
+### Date
+July 2026
+
+### Completed
+
+- Implemented Live Market Ticker using Yahoo Finance.
+- Created reusable `market_ticker_service.py`.
+- Added automatic market data refresh.
+- Enhanced AI Summary with market news context.
+- Improved Fundamental Analysis module.
+- Added financial metrics:
+  - P/E Ratio
+  - Forward P/E
+  - EPS
+  - Book Value
+  - Price-to-Book
+  - Dividend Yield
+  - ROE
+  - Debt-to-Equity
+  - Profit Margin
+  - Revenue Growth
+- Improved News section with source and publication date.
+- Improved Home page navigation and layout.
+- Began debugging and stabilizing MACD calculations.
+
+### Challenges
+
+- MACD returned `NaN` due to insufficient historical data and indicator initialization.
+- Market Analysis page routing required restructuring.
+- Auto-refresh package installation issue (`streamlit-autorefresh`) caused environment mismatch.
+
+### Resolution
+
+- Decoupled indicator calculations from chart display period.
+- Introduced reusable services for market ticker.
+- Standardized import structure and removed duplicate imports.
+- Adopted "Build → Test → Integrate → Verify" workflow for new features.
+
+### Next Sprint
+
+- Complete Market Analysis module.
+- Complete Compare Stocks.
+- Build Portfolio module.

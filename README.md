@@ -312,6 +312,23 @@ This project aims to become a complete AI-powered stock analysis platform capabl
 - Portfolio Management
 - Investment Insights
 
+## Features
+
+- Live Indian Stock Analysis
+- AI Powered Stock Advisor
+- Google Gemini Integration
+- Technical Analysis
+  - RSI
+  - MACD
+  - Bollinger Bands
+- Fundamental Analysis
+- AI Summary
+- Live Stock News
+- Live Market Ticker
+- Interactive Stock Charts
+- Compare Stocks (Coming Soon)
+- Portfolio (Coming Soon)
+
 ---
 
 ## 👨‍💻 Developer

@@ -34,23 +34,22 @@ The AI Indian Stock Market Analyzer follows a modular service-oriented architect
 # Folder Structure
 
 ```
-AI_Indian_Stock_Market_Analyzer/
-
+AI_Indian_Stock_Market_Analyzer
 │
 ├── app.py
-├── requirements.txt
-├── .env
-├── README.md
 │
-├── services/
+├── services
+│   ├── ai_service.py
 │   ├── stock_service.py
-│   ├── chart_service.py
 │   ├── technical_service.py
-│   └── ai_service.py
+│   ├── chart_service.py
+│   ├── news_service.py
+│   ├── market_service.py
+│   └── market_ticker_service.py   ← NEW
 │
-├── docs/
+├── docs
 │
-└── assets/
+└── assets
 ```
 
 ---
@@ -255,3 +254,21 @@ prediction_service.py
 - Clean separation of responsibilities
 - Production-ready structure
 - Supports future feature additions without major refactoring
+
+## New Component
+
+### market_ticker_service.py
+
+Responsibilities:
+
+- Fetch live market index data.
+- Provide reusable market ticker data.
+- Render market ticker HTML.
+- Support automatic refresh without affecting other application modules.
+
+### Design Benefits
+
+- Separation of concerns.
+- Reusable service.
+- Easier maintenance.
+- Cleaner `app.py`.
