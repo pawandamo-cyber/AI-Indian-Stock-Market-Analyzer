@@ -635,3 +635,21 @@ Develop one feature at a time using the workflow:
 Build → Test → Integrate → Verify
 
 This reduces debugging complexity and improves stability.
+
+## Yahoo Finance Ticker Changes
+
+Issue:
+- Tata Motors (TATAMOTORS.NS) returned:
+  "Quote not found" and "possibly delisted".
+
+Root Cause:
+- Yahoo Finance changed the active ticker from
+  TATAMOTORS.NS to TMCV.NS.
+
+Resolution:
+- Updated Data/nifty50.py to use TMCV.
+
+Lesson:
+- Financial data providers may change ticker symbols due to
+  mergers, demergers, or corporate restructuring.
+- Periodically validate ticker lists instead of assuming they remain permanent.

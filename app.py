@@ -3,10 +3,10 @@ from streamlit_autorefresh import st_autorefresh
 from services.news_service import (get_stock_news, format_news_for_ai)
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
-from services.market_service import (get_market_indices, get_market_mood)
+from services.market_service import (get_market_indices, get_market_mood, get_top_gainers, get_top_losers, get_most_active, get_52_week_breakouts)
 from services.market_ticker_service import (get_live_indices, render_market_ticker)
 from services.ai_service import generate_ai_summary
-from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)  
+from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)
 
 # ----------------------------
 # Page Configuration
@@ -70,77 +70,104 @@ if menu == "Home":
         "technical indicators, fundamentals, news, and AI."
     )
 
+    # -------------------------------
+    # Remember selected stock
+    # -------------------------------
+
+    if "stock" not in st.session_state:
+        st.session_state.stock = ""
+
     stock = st.text_input(
         "🔍 Enter NSE Stock Symbol",
+        value=st.session_state.stock,
         placeholder="Example: RELIANCE, TCS, HDFCBANK"
     )
 
-    period = st.selectbox(
-    "Select Chart Duration",
-    [
+    st.session_state.stock = stock
+
+    # -------------------------------
+    # Remember selected period
+    # -------------------------------
+
+    periods = [
         "1mo",
         "3mo",
         "6mo",
         "1y",
         "5y"
     ]
-)
+
+    if "period" not in st.session_state:
+        st.session_state.period = "6mo"
+
+    period = st.selectbox(
+        "Select Chart Duration",
+        periods,
+        index=periods.index(st.session_state.period)
+    )
+
+    st.session_state.period = period
+
+    if "analyze_clicked" not in st.session_state:
+        st.session_state.analyze_clicked = False
+
     if st.button("Analyze Stock"):
+        st.session_state.analyze_clicked = True
 
-        if stock:
+    if st.session_state.analyze_clicked and stock:
 
-            data = get_stock_info(stock.upper())
+        data = get_stock_info(stock.upper())
 
             #st.write(data)      # Temporary for testing
 
-            news = get_stock_news(stock.upper())
+        news = get_stock_news(stock.upper())
 
-            formatted_news = format_news_for_ai(news)
+        formatted_news = format_news_for_ai(news)
 
-            if "Error" in data:
-                st.error(data["Error"])
+        if "Error" in data:
+            st.error(data["Error"])
 
-            else:
+        else:
 
-                st.success(f"Analysis for {stock.upper()}")
+            st.success(f"Analysis for {stock.upper()}")
 
-                col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
 
-                with col1:
-                    st.metric("Current Price", f"₹{data['Current Price']:.2f}")
-                    st.metric("Open", f"₹{data['Open']:.2f}")
-                    st.metric("Previous Close", f"₹{data['Previous Close']:.2f}")
-                    st.metric("Day High", f"₹{data['Day High']:.2f}")
-                    st.metric("Day Low", f"₹{data['Day Low']:.2f}")
+            with col1:
+                st.metric("Current Price", f"₹{data['Current Price']:.2f}")
+                st.metric("Open", f"₹{data['Open']:.2f}")
+                st.metric("Previous Close", f"₹{data['Previous Close']:.2f}")
+                st.metric("Day High", f"₹{data['Day High']:.2f}")
+                st.metric("Day Low", f"₹{data['Day Low']:.2f}")
 
-                with col2:
-                    st.metric("52 Week High", f"₹{data['52 Week High']:.2f}")
-                    st.metric("52 Week Low", f"₹{data['52 Week Low']:.2f}")
+            with col2:
+                st.metric("52 Week High", f"₹{data['52 Week High']:.2f}")
+                st.metric("52 Week Low", f"₹{data['52 Week Low']:.2f}")
 
-                    st.metric("Volume", f"{data['Volume']:,}")
+                st.metric("Volume", f"{data['Volume']:,}")
 
-                    market_cap = data["Market Cap"]
+                market_cap = data["Market Cap"]
 
-                    if market_cap:
-                        market_cap = market_cap / 1e12
-                        market_cap = f"₹{market_cap:.2f} Trillion"
+                if market_cap:
+                    market_cap = market_cap / 1e12
+                    market_cap = f"₹{market_cap:.2f} Trillion"
 
-                    st.metric("Market Cap", market_cap)
+                st.metric("Market Cap", market_cap)
 
-                st.write("### Company Information")
+            st.write("### Company Information")
 
-                st.write("**Sector:**", data["Sector"])
-                st.write("**Industry:**", data["Industry"])
+            st.write("**Sector:**", data["Sector"])
+            st.write("**Industry:**", data["Industry"])
 
-                # ==========================================
-                # Fundamental Analysis
-                # ==========================================
+            # ==========================================
+            # Fundamental Analysis
+            # ==========================================
 
-                st.subheader("📊 Fundamental Analysis")
+            st.subheader("📊 Fundamental Analysis")
 
-                col1, col2 = st.columns(2)
+            col1, col2 = st.columns(2)
 
-                with col1:
+            with col1:
 
                     st.metric(
                         "PE Ratio",
@@ -168,7 +195,7 @@ if menu == "Home":
                         if data["Dividend Yield"] is not None else "N/A"
                     )
 
-                with col2:
+            with col2:
 
                     st.metric(
                         "Forward PE",
@@ -199,59 +226,59 @@ if menu == "Home":
                         if data["Revenue Growth"] is not None else "N/A"
                     )
 
-                st.divider()
+            st.divider()
 
-                rsi = calculate_rsi(stock.upper(), period)
-                macd = calculate_macd(stock.upper(), period)
-                bollinger = calculate_bollinger(stock.upper(), period)
+            rsi = calculate_rsi(stock.upper(), period)
+            macd = calculate_macd(stock.upper(), period)
+            bollinger = calculate_bollinger(stock.upper(), period)
 
-                overall = calculate_overall_score(
-                    rsi,
-                    macd,
-                    bollinger
+            overall = calculate_overall_score(
+                rsi,
+                macd,
+                bollinger
                 )
 
-                ai_summary = generate_ai_summary(
-                    stock=stock.upper(),
-                    company=data["Company Name"],
-                    rsi=rsi,
-                    macd=macd,
-                    bollinger=bollinger,
-                    overall=overall,
-                    news=formatted_news
+            ai_summary = generate_ai_summary(
+            stock=stock.upper(),
+            company=data["Company Name"],
+            rsi=rsi,
+            macd=macd,
+            bollinger=bollinger,
+            overall=overall,
+            news=formatted_news
+            )
+
+            st.divider()
+
+            st.subheader("🤖 AI Verdict")
+
+            col1, col2 = st.columns([1, 2])
+
+            with col1:
+
+                if overall["recommendation"] == "BUY":
+                    st.success("🟢 BUY")
+
+                elif overall["recommendation"] == "SELL":
+                    st.error("🔴 SELL")
+
+                else:
+                    st.warning("🟡 HOLD")
+
+                st.metric(
+                    "Confidence",
+                    f"{overall['confidence']}%"
                 )
 
-                st.divider()
+                st.metric(
+                    "Technical Score",
+                    overall["stars"]
+            )
 
-                st.subheader("🤖 AI Verdict")
+            with col2:
 
-                col1, col2 = st.columns([1, 2])
-
-                with col1:
-
-                    if overall["recommendation"] == "BUY":
-                        st.success("🟢 BUY")
-
-                    elif overall["recommendation"] == "SELL":
-                        st.error("🔴 SELL")
-
-                    else:
-                        st.warning("🟡 HOLD")
-
-                    st.metric(
-                        "Confidence",
-                        f"{overall['confidence']}%"
-                    )
-
-                    st.metric(
-                        "Technical Score",
-                        overall["stars"]
-                    )
-
-                with col2:
-
-                    st.info(
-                        f"""
+                st.info(
+                    f"""
                 ### AI Recommendation
 
                 **Recommendation:** {overall['recommendation']}
@@ -265,175 +292,165 @@ if menu == "Home":
                 """
                     )
 
-                # Star Rating
+            # Star Rating
                
-                st.subheader("📊 Technical Analysis")
+            st.subheader("📊 Technical Analysis")
 
-                st.write("## 📈 Stock Price Chart")
+            st.write("## 📈 Stock Price Chart")
 
-                fig = get_stock_chart(stock.upper(), period)
+            fig = get_stock_chart(stock.upper(), period)
 
-                st.plotly_chart(fig, width="stretch")
+            st.plotly_chart(fig, width="stretch")
 
-                st.subheader("🧠 AI Technical Score")
+            st.subheader("🧠 AI Technical Score")
 
-                col1, col2, col3 = st.columns(3)
+            col1, col2, col3 = st.columns(3)
 
-                with col1:
-                    st.metric("Technical Score", overall["stars"])
+            with col1:
+                st.metric("Technical Score", overall["stars"])
 
-                with col2:
-                    st.metric("Confidence", f"{overall['confidence']}%")
-                    st.progress(overall["confidence"] / 100)
+            with col2:
+                st.metric("Confidence", f"{overall['confidence']}%")
+                st.progress(overall["confidence"] / 100)
 
-                with col3:
-                    st.metric("Recommendation", overall["recommendation"])
+            with col3:
+                st.metric("Recommendation", overall["recommendation"])
 
-                if overall["recommendation"] == "BUY":
-                    st.success("🟢 Overall Recommendation: BUY")
+            if overall["recommendation"] == "BUY":
+                st.success("🟢 Overall Recommendation: BUY")
 
-                elif overall["recommendation"] == "SELL":
-                    st.error("🔴 Overall Recommendation: SELL")
+            elif overall["recommendation"] == "SELL":
+                st.error("🔴 Overall Recommendation: SELL")
 
-                else:
-                    st.warning("🟡 Overall Recommendation: HOLD")
+            else:
+                st.warning("🟡 Overall Recommendation: HOLD")
 
-                if overall["recommendation"] == "BUY":
-                    st.info(
-                        "📈 Technical indicators are mostly bullish. "
-                        "The stock is showing positive momentum."
-                    )
+            if overall["recommendation"] == "BUY":
+                st.info(
+                    "📈 Technical indicators are mostly bullish. "
+                    "The stock is showing positive momentum."
+                )
 
-                elif overall["recommendation"] == "SELL":
-                    st.info(
-                        "📉 Technical indicators suggest weakness. "
-                        "Consider waiting for confirmation."
+            elif overall["recommendation"] == "SELL":
+                st.info(
+                    "📉 Technical indicators suggest weakness. "
+                    "Consider waiting for confirmation."
             )
 
-                else:
-                    st.info(
-                        "⚖️ Technical indicators are mixed. "
-                        "Wait for stronger confirmation before taking action."
+            else:
+                st.info(
+                    "⚖️ Technical indicators are mixed. "
+                    "Wait for stronger confirmation before taking action."
+                )
+
+            st.subheader("📰 Latest News")
+
+            for article in news:
+                with st.container():
+                    st.markdown(f"### 📰 {article['title']}")
+                    st.caption(
+                        f"{article['source']} • {article['published']}"
                     )
+                    st.link_button(
+                        "🔗 Read Full Article",
+                        article["link"]
+                    )
+                    st.divider()
 
-                st.subheader("📰 Latest News")
+            st.subheader("🤖 AI Stock Advisor")
 
-                for article in news:
-
-                    with st.container():
-
-                        st.markdown(f"### 📰 {article['title']}")
-
-                        st.caption(
-                            f"{article['source']} • {article['published']}"
-                        )
-
-                        st.link_button(
-                            "🔗 Read Full Article",
-                            article["link"]
-                        )
-
-                        st.divider()
-
-                st.subheader("🤖 AI Stock Advisor")
-
-                with st.spinner("🤖 Gemini is analyzing the stock..."):
-                    st.markdown(ai_summary)    
+            with st.spinner("🤖 Gemini is analyzing the stock..."):
+                st.markdown(ai_summary)    
                     
-                st.subheader("📈 RSI Analysis")    
+            st.subheader("📈 RSI Analysis")    
 
-                with col1:
-                    st.metric("RSI (14)", rsi["value"])
+            with col1:
+                st.metric("RSI (14)", rsi["value"])
 
-                with col2:
-                    st.write("### RSI Signal")
-
+            with col2:
+                st.write("### RSI Signal")
                 if "Oversold" in rsi["signal"]:
                     st.success(rsi["signal"])
-
                 elif "Overbought" in rsi["signal"]:
                     st.error(rsi["signal"])
-
                 else:
                     st.warning(rsi["signal"])
 
-                with col3:
-
-                    st.write("### Recommendation")
-
+            with col3:
+                st.write("### Recommendation")
                 if rsi["recommendation"] == "BUY":
                     st.success("🟢 BUY")
-
                 elif rsi["recommendation"] == "SELL":
                     st.error("🔴 SELL")
-
                 else:
                     st.warning("🟡 HOLD")
 
-                    if rsi["recommendation"] == "BUY":
-                        st.info("📈 RSI is below 30, indicating the stock may be oversold and could present a buying opportunity.")
+            if rsi["recommendation"] == "BUY":
+                st.info("📈 RSI is below 30, indicating the stock may be oversold and could present a buying opportunity.")
 
-                    elif rsi["recommendation"] == "SELL":
-                        st.info("📉 RSI is above 70, indicating the stock may be overbought and could face selling pressure.")
+            elif rsi["recommendation"] == "SELL":
+                st.info("📉 RSI is above 70, indicating the stock may be overbought and could face selling pressure.")
 
-                    else:
-                        st.info("⚖️ RSI is between 30 and 70, suggesting neutral market momentum.")
+            else:
+                st.info("⚖️ RSI is between 30 and 70, suggesting neutral market momentum.")
+                        
+            # MACD Analysis    
+            st.subheader("📈 MACD Analysis")
 
-                st.subheader("📈 MACD Analysis")
+            col1, col2, col3 = st.columns(3)
 
-                col1, col2, col3 = st.columns(3)
+            with col1:
+                st.metric("MACD", macd["macd"])
 
-                with col1:
-                    st.metric("MACD", macd["macd"])
+            with col2:
+                st.metric("Signal Line", macd["signal"])
 
-                with col2:
-                    st.metric("Signal Line", macd["signal"])
+            with col3:
 
-                with col3:
+                if macd["recommendation"] == "BUY":
+                    st.success("🟢 BUY")
 
-                    if macd["recommendation"] == "BUY":
-                        st.success("🟢 BUY")
-
-                    elif macd["recommendation"] == "SELL":
-                        st.error("🔴 SELL")
-
-                    else:
-                        st.warning("🟡 HOLD")        
-
-                st.write("## 📊 Bollinger Bands Analysis")
-
-                col1, col2, col3, col4 = st.columns(4)
-
-                with col1:
-                    st.metric("Current Price", f"₹{bollinger['price']:.2f}")
-
-                with col2:
-                    st.metric("Upper Band", f"₹{bollinger['upper']:.2f}")
-
-                with col3:
-                    st.metric("Middle Band", f"₹{bollinger['middle']:.2f}")
-
-                with col4:
-                    st.metric("Lower Band", f"₹{bollinger['lower']:.2f}")
-
-                # Status
-                st.metric("Status", bollinger["status"])
-
-                # Recommendation
-                if bollinger["recommendation"] == "BUY":
-                        st.success("🟢 BUY")
-
-                elif bollinger["recommendation"] == "SELL":
+                elif macd["recommendation"] == "SELL":
                     st.error("🔴 SELL")
 
                 else:
                     st.warning("🟡 HOLD")
+                    
+            # Bollinger Bands Analysis        
+            st.write("## 📊 Bollinger Bands Analysis")
 
-                # Interpretation
-                st.info(bollinger["interpretation"])
+            col1, col2, col3, col4 = st.columns(4)
 
-        else:
-            st.warning("Please enter a stock symbol.")
+            with col1:
+                st.metric("Current Price", f"₹{bollinger['price']:.2f}")
+
+            with col2:
+                st.metric("Upper Band", f"₹{bollinger['upper']:.2f}")
+
+            with col3:
+                st.metric("Middle Band", f"₹{bollinger['middle']:.2f}")
+
+            with col4:
+                st.metric("Lower Band", f"₹{bollinger['lower']:.2f}")
+
+            # Status
+            st.metric("Status", bollinger["status"])
+
+            # Recommendation
+            if bollinger["recommendation"] == "BUY":
+                st.success("🟢 BUY")
+
+            elif bollinger["recommendation"] == "SELL":
+                st.error("🔴 SELL")
+
+            else:
+                st.warning("🟡 HOLD")
+
+            # Interpretation
+            st.info(bollinger["interpretation"])
+
+    else:
+        st.warning("Please enter a stock symbol.")
 
 # =====================================================
 # END OF HOME PAGE
@@ -447,41 +464,12 @@ elif menu == "Market Analysis":
 
     st.title("📈 Indian Market Analysis")
 
-    st.write("DEBUG: Market Analysis Page Loaded")
+    st.subheader("🚀 52 Week High Breakouts")
 
-    market = get_market_indices()
+    breakouts = get_52_week_breakouts()
 
-    col1, col2, col3 = st.columns(3)
+    st.dataframe(breakouts, width="stretch")
 
-    with col1:
-
-            nifty = market["NIFTY 50"]
-
-            st.metric(
-                "NIFTY 50",
-                nifty["current"],
-                f"{nifty['change']} ({nifty['change_percent']}%)"
-        )
-
-            with col2:
-
-                sensex = market["SENSEX"]
-
-                st.metric(
-                "SENSEX",
-                sensex["current"],
-                f"{sensex['change']} ({sensex['change_percent']}%)"
-            )
-
-            with col3:
-
-                bank = market["BANK NIFTY"]
-
-                st.metric(
-                "BANK NIFTY",
-                bank["current"],
-                f"{bank['change']} ({bank['change_percent']}%)"
-        )
 
 # ==========================================
 # Compare Stocks

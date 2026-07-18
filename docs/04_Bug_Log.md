@@ -644,6 +644,20 @@ Resolved
 
 Installed the package in the project virtual environment and verified the correct Python interpreter.
 
+Bug #019
+
+Issue:
+TATAMOTORS.NS returned HTTP 404 during yfinance download.
+
+Root Cause:
+Yahoo Finance ticker changed to TMCV.NS.
+
+Status:
+Resolved
+
+Resolution:
+Updated NIFTY50 ticker list.
+
 ---
 
 # End of Bug Log
