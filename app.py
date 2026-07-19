@@ -7,6 +7,7 @@ from services.market_service import (get_market_indices, get_market_mood, get_to
 from services.market_ticker_service import (get_live_indices, render_market_ticker)
 from services.ai_service import generate_ai_summary
 from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)
+from services.compare_service import compare_stocks
 
 # ----------------------------
 # Page Configuration
@@ -477,30 +478,114 @@ elif menu == "Market Analysis":
 
 elif menu == "Compare Stocks":
 
-    st.title("📊 Compare Two Stocks")
+    st.title("📊 Compare Stocks")
 
     col1, col2 = st.columns(2)
+
+    # Remember selected stocks
+    if "compare_stock1" not in st.session_state:
+        st.session_state.compare_stock1 = ""
+
+    if "compare_stock2" not in st.session_state:
+        st.session_state.compare_stock2 = ""
 
     with col1:
         stock1 = st.text_input(
             "Stock 1",
-            placeholder="Example: TCS"
+            value=st.session_state.compare_stock1,
+            placeholder="Example: HDFCBANK"
         )
 
     with col2:
         stock2 = st.text_input(
             "Stock 2",
-            placeholder="Example: INFY"
+            value=st.session_state.compare_stock2,
+            placeholder="Example: ICICIBANK"
         )
 
-    if st.button("Compare"):
+    # Save user selections
+    st.session_state.compare_stock1 = stock1
+    st.session_state.compare_stock2 = stock2
+    
+    # Current stock pair
+    current_pair = (
+        stock1.upper(),
+        stock2.upper()
+    )
 
-        if stock1 and stock2:
+    # Remember last compared pair
+    if "last_compare_pair" not in st.session_state:
+        st.session_state.last_compare_pair = current_pair
 
-            data1 = get_stock_info(stock1.upper())
-            data2 = get_stock_info(stock2.upper())
+    # Remember button state
+    if "compare_clicked" not in st.session_state:
+        st.session_state.compare_clicked = False
+        
+    # If user changes either stock,
+    # hide the old comparison
+    if current_pair != st.session_state.last_compare_pair:
+        st.session_state.compare_clicked = False
+        
+    # Compare button
+    if st.button("Compare Stocks"):
+        st.session_state.compare_clicked = True
+        st.session_state.last_compare_pair = current_pair
 
-            st.subheader("Comparison")
+    #Keep showing comparison after refresh
+    if st.session_state.compare_clicked and stock1 and stock2:
 
-        else:
-            st.warning("Please enter both stock symbols.")
+            with st.spinner("Comparing Stocks..."):
+
+                comparison, score1, score2 = compare_stocks(
+                    stock1,
+                    stock2
+            )
+
+            st.success("Comparison Completed")
+            
+            comparison["Metric"] = comparison["Metric"].replace({
+                "Current Price": "💰 Current Price",
+                "Market Cap": "🏦 Market Cap",
+                "P/E Ratio": "📈 P/E Ratio",
+                "EPS": "💵 EPS",
+                "ROE": "📊 ROE",
+                "Dividend Yield": "💎 Dividend Yield",
+                "52 Week High": "🚀 52 Week High",
+                "52 Week Low": "📉 52 Week Low"
+            })
+
+            st.dataframe(
+                comparison,
+                width="stretch",
+                hide_index=True
+            )
+            
+            st.markdown("---")
+            st.subheader("🏆 Overall Score")
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                st.metric(stock1.upper(), score1)
+
+            with col2:
+                st.metric(stock2.upper(), score2)
+
+            if score1 > score2:
+
+                st.success(
+                    f"🥇 Overall Winner : {stock1.upper()}"
+                )
+
+            elif score2 > score1:
+
+                st.success(
+                    f"🥇 Overall Winner : {stock2.upper()}"
+                )
+
+            else:
+
+                st.info("🤝 Overall Result : Tie")
+
+    else:
+        st.warning("Enter both stock symbols.")
