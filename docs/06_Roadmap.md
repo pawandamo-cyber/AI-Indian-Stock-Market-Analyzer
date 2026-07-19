@@ -510,3 +510,18 @@ July 2026
 - GitHub Release
 - LinkedIn Showcase
 - Streamlit Cloud Deployment
+
+✅ Compare Stocks
+
+## Version 1.11
+
+Portfolio Analysis
+
+- Portfolio Summary
+- Investment Value
+- Current Value
+- Profit & Loss
+- Allocation Chart
+- Best Performer
+- Worst Performer
+- AI Portfolio Insights

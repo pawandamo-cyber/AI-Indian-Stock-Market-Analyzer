@@ -653,3 +653,12 @@ Lesson:
 - Financial data providers may change ticker symbols due to
   mergers, demergers, or corporate restructuring.
 - Periodically validate ticker lists instead of assuming they remain permanent.
+
+## Version 1.10
+
+Lessons Learned
+
+- Separate raw values from display formatting.
+- Session State greatly improves Streamlit UX.
+- Compare numeric values before formatting.
+- Keep formatting logic isolated from business logic.

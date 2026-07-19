@@ -439,3 +439,26 @@ This release focuses on improving the intelligence layer of the application.
 - MACD requires final validation
 - Market Analysis module under development
 - Compare Stocks module under development
+
+# Version 1.10
+
+Release Date:
+19 July 2026
+
+## New Features
+
+- Compare Stocks module
+- Overall winner calculation
+- Enhanced comparison table
+- Improved formatting
+- Session state improvements
+
+## Improvements
+
+- Better UI
+- Cleaner comparison output
+- Automatic stock change detection
+
+## Known Issues
+
+- P/E Ratio formatting enhancement pending.

@@ -658,6 +658,22 @@ Resolved
 Resolution:
 Updated NIFTY50 ticker list.
 
+## v1.10
+
+### Fixed
+
+- Compare Stocks page refresh issue
+- Session state reset problem
+- Currency formatting
+- Market Cap formatting
+- Percentage formatting
+
+### Known Issue
+
+- P/E Ratio displays full precision instead of two decimal places.
+- Functionality is correct.
+- Planned fix in a future version.
+
 ---
 
 # End of Bug Log

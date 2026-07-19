@@ -272,3 +272,16 @@ Responsibilities:
 - Reusable service.
 - Easier maintenance.
 - Cleaner `app.py`.
+
+## Compare Service
+
+File:
+services/compare_service.py
+
+Responsibilities:
+
+- Fetch stock metrics
+- Compare two companies
+- Evaluate metric winners
+- Calculate overall scores
+- Return formatted comparison table

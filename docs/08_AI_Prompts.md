@@ -448,6 +448,10 @@ Always improve prompts incrementally and document every major version.
 
 ---
 
+Prompt:
+
+Compare two Indian stocks using their technical and fundamental metrics and determine the better investment based on overall performance.
+
 Last Updated
 
 July 2026

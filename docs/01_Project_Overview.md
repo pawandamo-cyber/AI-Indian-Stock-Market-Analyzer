@@ -169,6 +169,17 @@ Next Sprint:
 - Complete Compare Stocks
 - Build Portfolio
 
+## Current Version
+
+**v1.10**
+
+Latest completed module:
+- ✅ Compare Stocks
+
+### New Module
+
+Compare two Indian stocks using both technical and fundamental metrics with an overall winner based on multiple evaluation criteria.
+
 ---
 
 # Repository
