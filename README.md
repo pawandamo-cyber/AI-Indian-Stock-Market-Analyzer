@@ -1,39 +1,43 @@
 # 📈 AI Indian Stock Market Analyzer
 
-An AI-powered stock market analysis platform built using **Python**, **Streamlit**, **Plotly**, **Yahoo Finance**, **Google News RSS**, and **Google Gemini AI**.
+An AI-powered stock market analysis platform built using **Python, Streamlit, Plotly, Yahoo Finance, Google News RSS, and Google Gemini AI**.
 
-The application helps investors analyze Indian stocks using technical indicators, live market data, company news, and AI-generated insights.
+The application helps investors analyze Indian stocks using **technical indicators, fundamental analysis, live market data, company news, AI-generated insights, and stock comparison tools**.
 
 ---
 
-## 🚀 Features
+# 🚀 Features
 
-### 📊 Market Analysis
-- Live NSE stock data
-- Company information
-- Market capitalization
-- 52 Week High / Low
-- Volume
+## 📊 Market Analysis
+
+- Live NSE Stock Data
+- Company Information
 - Current Price
-- Open / Previous Close
+- Open Price
+- Previous Close
+- Market Capitalization
+- Volume
+- 52 Week High / Low
 
 ---
 
-### 📈 Interactive Stock Charts
+## 📈 Interactive Stock Charts
 
 Professional interactive charts powered by Plotly.
 
-Features include:
+### Features
 
 - Candlestick Chart
 - SMA 20
 - SMA 50
 - Volume Analysis
+- RSI
+- MACD
 - Bollinger Bands
 - Zoom & Pan
 - Multiple Timeframes
 
-Supported Durations:
+### Supported Durations
 
 - 1 Month
 - 3 Months
@@ -43,24 +47,25 @@ Supported Durations:
 
 ---
 
-### 📊 Technical Analysis
+# 📊 Technical Analysis
 
-The application automatically calculates:
+Automatically calculates:
 
-#### RSI (Relative Strength Index)
+### RSI
 
 - RSI Value
-- Oversold / Overbought Detection
+- Overbought / Oversold Detection
 - Buy / Hold / Sell Recommendation
 
-#### MACD
+### MACD
 
 - MACD Line
 - Signal Line
+- Histogram
 - Bullish / Bearish Trend
 - Buy / Hold / Sell Recommendation
 
-#### Bollinger Bands
+### Bollinger Bands
 
 - Upper Band
 - Middle Band
@@ -71,7 +76,31 @@ The application automatically calculates:
 
 ---
 
-### ⭐ AI Technical Score
+# 💼 Fundamental Analysis
+
+Analyze company fundamentals instantly.
+
+### Metrics
+
+- Market Capitalization
+- P/E Ratio
+- EPS
+- ROE
+- Dividend Yield
+- 52 Week High
+- 52 Week Low
+
+### AI Fundamental Verdict
+
+- Strong Buy
+- Buy
+- Hold
+- Sell
+- Overall Company Strength
+
+---
+
+# ⭐ AI Technical Score
 
 Combines all technical indicators into a single score.
 
@@ -84,23 +113,22 @@ Displays:
 
 ---
 
-### 🤖 AI Market Intelligence
+# 🤖 AI Market Intelligence
 
 Powered by **Google Gemini AI**
 
-The AI analyzes:
+AI analyzes:
 
-- RSI
-- MACD
-- Bollinger Bands
-- Technical Score
+- Technical Indicators
+- Fundamental Metrics
 - Company Information
 - Latest Company News
 
-The AI generates:
+Generates:
 
-- Overall Market Sentiment
-- Technical Analysis
+- Market Sentiment
+- Technical Summary
+- Fundamental Summary
 - News Impact
 - Risk Factors
 - Short-Term Outlook
@@ -109,11 +137,11 @@ The AI generates:
 
 ---
 
-### 📰 Live News Integration
+# 📰 Live News Integration
 
-Latest company news is fetched using Google News RSS.
+Latest company news fetched using **Google News RSS**.
 
-Features:
+### Features
 
 - Live Headlines
 - Source
@@ -122,49 +150,75 @@ Features:
 
 ---
 
-### 🤖 AI Verdict Dashboard
+# ⚖️ Compare Stocks
 
-Quick summary of the analysis.
+Compare two Indian stocks side by side.
+
+### Comparison Metrics
+
+- Current Price
+- Market Capitalization
+- P/E Ratio
+- EPS
+- ROE
+- Dividend Yield
+- 52 Week High
+- 52 Week Low
+
+### Features
+
+- Winner for each metric
+- Overall comparison score
+- Best stock recommendation
+- Professional comparison table
+- Session State support
+
+---
+
+# 🤖 AI Verdict Dashboard
+
+Quick summary of the complete analysis.
 
 Displays:
 
 - BUY / HOLD / SELL
-- Confidence %
 - Technical Score
 - AI Recommendation
+- Confidence %
+- Overall Rating
 
 ---
 
-## 🛠 Tech Stack
+# 🛠 Tech Stack
 
-### Frontend
+## Frontend
 
 - Streamlit
 
-### Backend
+## Backend
 
 - Python
 
-### Data Sources
+## Data Sources
 
 - Yahoo Finance (yfinance)
 - Google News RSS
 
-### AI
+## AI
 
 - Google Gemini AI
 
-### Data Visualization
+## Visualization
 
 - Plotly
 
-### Technical Analysis
+## Technical Analysis
 
 - TA Library
 
 ---
 
-## 📂 Project Structure
+# 📂 Project Structure
 
 ```text
 AI_Indian_Stock_Market_Analyzer/
@@ -175,41 +229,39 @@ AI_Indian_Stock_Market_Analyzer/
 ├── services/
 │   ├── ai_service.py
 │   ├── chart_service.py
+│   ├── compare_service.py
+│   ├── fundamental_service.py
 │   ├── news_service.py
 │   ├── stock_service.py
 │   └── technical_service.py
 │
 ├── assets/
-│
 ├── Docs/
-│
 ├── data/
-│
 ├── requirements.txt
-│
 └── README.md
 ```
 
 ---
 
-## 📸 Application Preview
+# 📸 Application Modules
 
-### Dashboard
-
-- Company Information
-- AI Verdict
-- Interactive Stock Chart
-- Technical Dashboard
-- Live News
-- AI Market Intelligence
+- 🏠 Home Dashboard
+- 📊 Market Analysis
+- 📈 Technical Analysis
+- 💼 Fundamental Analysis
+- ⚖️ Compare Stocks
+- 📰 Live News
+- 🤖 AI Market Intelligence
+- ⭐ AI Verdict Dashboard
 
 ---
 
-## 🚀 Current Version
+# 🚀 Current Version
 
-**Version:** `v1.8.0`
+## Version: **v1.10**
 
-### Completed
+### ✅ Completed Modules
 
 - ✅ Live Stock Data
 - ✅ Interactive Charts
@@ -217,38 +269,49 @@ AI_Indian_Stock_Market_Analyzer/
 - ✅ MACD Analysis
 - ✅ Bollinger Bands
 - ✅ Technical Score
+- ✅ Fundamental Analysis
 - ✅ AI Verdict Dashboard
 - ✅ Google News Integration
 - ✅ AI Market Intelligence
+- ✅ Compare Stocks
 - ✅ Professional Dashboard Layout
 - ✅ Modular Service Architecture
 
 ---
 
-Latest Features
+# ✨ Latest Features (v1.10)
 
-- Fundamental Analysis
-- AI Verdict
-- Google News Integration
-- AI Market Intelligence
-
-## 🔄 Upcoming Features
-
-### Version 1.9
-
-- AI News Sentiment Analysis
-- Fundamental Analysis
-- PE Ratio
-- EPS
-- ROE
-- Debt to Equity
-- Intrinsic Score
+- Compare two Indian stocks
+- Winner detection for every metric
+- Overall comparison score
+- Improved UI
+- Better formatting
+- Session State support
+- Enhanced dashboard experience
 
 ---
 
-### Version 2.0
+# 🔄 Upcoming Features
 
-- Portfolio Tracker
+## Version 1.11
+
+### Portfolio Analysis
+
+- Portfolio Summary
+- Investment Value
+- Current Value
+- Profit & Loss
+- Asset Allocation
+- Best Performing Stock
+- Worst Performing Stock
+- Portfolio Charts
+- AI Portfolio Insights
+
+---
+
+## Version 2.0
+
+- AI News Sentiment Analysis
 - Watchlist
 - AI Portfolio Advisor
 - Real-Time Market Sentiment
@@ -259,7 +322,7 @@ Latest Features
 
 ---
 
-## ⚙ Installation
+# ⚙ Installation
 
 Clone the repository
 
@@ -281,7 +344,7 @@ python -m venv .venv
 
 Activate the environment
 
-Windows
+**Windows**
 
 ```bash
 .venv\Scripts\activate
@@ -301,47 +364,48 @@ streamlit run app.py
 
 ---
 
-## 📈 Future Vision
+# 📈 Future Vision
 
-This project aims to become a complete AI-powered stock analysis platform capable of:
+The goal is to build a complete AI-powered investment platform capable of:
 
 - Technical Analysis
 - Fundamental Analysis
-- News Intelligence
-- AI Recommendations
+- AI Market Intelligence
+- News Sentiment Analysis
 - Portfolio Management
+- Portfolio AI Advisor
 - Investment Insights
-
-## Features
-
-- Live Indian Stock Analysis
-- AI Powered Stock Advisor
-- Google Gemini Integration
-- Technical Analysis
-  - RSI
-  - MACD
-  - Bollinger Bands
-- Fundamental Analysis
-- AI Summary
-- Live Stock News
-- Live Market Ticker
-- Interactive Stock Charts
-- Compare Stocks (Coming Soon)
-- Portfolio (Coming Soon)
+- Watchlist
+- Real-Time Alerts
 
 ---
 
-## 👨‍💻 Developer
+# 🌟 Key Features
 
-**Pawan**
-
-Technology Support Analyst | AI & GenAI Enthusiast
-
-Built with ❤️ using Python, Streamlit, Plotly, Yahoo Finance, and Google Gemini AI.
+- 🇮🇳 Live Indian Stock Analysis
+- 🤖 Google Gemini AI Integration
+- 📈 Interactive Charts
+- 📊 Technical Analysis
+- 💼 Fundamental Analysis
+- ⚖️ Compare Stocks
+- 📰 Live News
+- ⭐ AI Verdict Dashboard
+- 📉 Market Insights
+- 📊 Professional Dashboard
 
 ---
 
-## ⭐ Support
+# 👨‍💻 Developer
+
+## Pawan
+
+**Technology Support Analyst | AI & GenAI Enthusiast**
+
+Built with ❤️ using **Python, Streamlit, Plotly, Yahoo Finance, Google News RSS, and Google Gemini AI.**
+
+---
+
+# ⭐ Support
 
 If you like this project:
 
