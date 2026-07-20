@@ -125,3 +125,65 @@ Rules
     except Exception as e:
         return f"AI Error: {e}"
     
+def generate_portfolio_ai_summary(portfolio, summary):
+
+    if not portfolio:
+
+        return "Portfolio is empty."
+
+    portfolio_text = ""
+
+    for holding in portfolio:
+
+        portfolio_text += f"""
+Stock : {holding['Symbol']}
+Quantity : {holding['Quantity']}
+Buy Price : ₹{holding['Buy Price']}
+Current Price : ₹{holding['Current Price']}
+
+"""
+
+    prompt = f"""
+You are an expert Indian Stock Market Portfolio Advisor.
+
+Analyze the following portfolio.
+
+Portfolio Holdings
+
+{portfolio_text}
+
+Portfolio Summary
+
+Total Investment : ₹{summary['Total Investment']:.2f}
+
+Current Value : ₹{summary['Current Value']:.2f}
+
+Total Profit : ₹{summary['Total Profit']:.2f}
+
+Total Return : {summary['Total Return']}%
+
+Provide your response in exactly this format:
+
+📊 Overall Portfolio Health
+
+⚠ Risk Level
+
+📈 Strengths
+
+📉 Weaknesses
+
+💡 Suggestions
+
+Keep the response under 250 words.
+"""
+
+    try:
+
+        response = model.generate_content(prompt)
+
+        return response.text
+
+    except Exception as e:
+
+        return f"AI Error: {e}"
+    

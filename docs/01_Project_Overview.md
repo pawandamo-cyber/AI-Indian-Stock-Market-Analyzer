@@ -180,6 +180,248 @@ Latest completed module:
 
 Compare two Indian stocks using both technical and fundamental metrics with an overall winner based on multiple evaluation criteria.
 
+# Current Version
+
+**v1.11**
+
+---
+
+# Project Overview
+
+AI Indian Stock Market Analyzer is a Streamlit-based application that combines financial analysis with Generative AI to help investors make informed decisions.
+
+The application supports:
+
+- Technical Analysis
+- Fundamental Analysis
+- Market Analysis
+- Stock Comparison
+- News Analysis
+- Portfolio Management
+- AI Portfolio Advisor
+
+---
+
+# Technology Stack
+
+Frontend
+
+- Streamlit
+
+Backend
+
+- Python
+
+Libraries
+
+- Pandas
+- NumPy
+- Plotly
+- yFinance
+- Matplotlib
+
+Artificial Intelligence
+
+- Google Gemini AI
+
+---
+
+# Current Modules
+
+## Home
+
+- Dashboard
+- Live Market Ticker
+
+---
+
+## Market Analysis
+
+- NIFTY
+- BANKNIFTY
+- SENSEX
+
+---
+
+## Technical Analysis
+
+- Candlestick Chart
+- SMA
+- RSI
+- MACD
+- Bollinger Bands
+- AI Recommendation
+
+---
+
+## Fundamental Analysis
+
+- Company Information
+- Financial Ratios
+- Valuation Metrics
+- AI Summary
+
+---
+
+## Compare Stocks
+
+- Side-by-side comparison
+- Technical comparison
+- Fundamental comparison
+- AI Verdict
+
+---
+
+## News Analysis
+
+- Latest News
+- AI News Summary
+
+---
+
+## Portfolio Management
+
+Features
+
+- Add Holdings
+- Edit Holdings
+- Delete Holdings
+- Portfolio Summary
+- Allocation Chart
+- Save Portfolio
+- Load Portfolio
+- Auto Load
+- Live Price Refresh
+
+---
+
+## AI Portfolio Advisor
+
+Uses Google Gemini AI to generate
+
+- Portfolio Health
+- Risk Analysis
+- Strengths
+- Weaknesses
+- Diversification Suggestions
+- Investment Advice
+
+---
+
+# Current Project Structure
+
+```
+AI-Indian-Stock-Market-Analyzer/
+
+app.py
+
+services/
+│
+├── stock_service.py
+├── chart_service.py
+├── news_service.py
+├── ai_service.py
+└── portfolio_service.py
+
+docs/
+
+assets/
+
+requirements.txt
+README.md
+```
+
+---
+
+# Architecture
+
+The application follows a modular service-based architecture.
+
+```
+Streamlit UI
+        │
+        ▼
+Application Logic
+        │
+        ▼
+Service Layer
+        │
+        ├── Stock Service
+        ├── Chart Service
+        ├── News Service
+        ├── Portfolio Service
+        └── AI Service
+        │
+        ▼
+Yahoo Finance
+Google Gemini AI
+```
+
+---
+
+# Current Status
+
+Completed Modules
+
+✅ Home
+
+✅ Market Analysis
+
+✅ Technical Analysis
+
+✅ Fundamental Analysis
+
+✅ Compare Stocks
+
+✅ News Analysis
+
+✅ Portfolio Management
+
+✅ AI Portfolio Advisor
+
+---
+
+# Current Release
+
+Version
+
+**v1.11**
+
+Status
+
+✅ Stable
+
+Ready for GitHub Release
+
+---
+
+# Next Development (v1.12)
+
+Upcoming Features
+
+- Smart Stock Search
+- Company Name Search
+- NSE Symbol Validation
+- Autocomplete
+- Sector Allocation
+- Historical Portfolio Performance
+- Auto Live Refresh
+- Portfolio Health Score
+- Enhanced AI Portfolio Advisor
+
+---
+
+# Long-Term Vision
+
+Transform the application into a complete AI-powered investment assistant capable of:
+
+- Real-time market analysis
+- Portfolio optimization
+- AI-driven investment insights
+- Personalized recommendations
+- Advanced visualization
+- Professional reporting
+
 ---
 
 # Repository

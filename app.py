@@ -1,11 +1,13 @@
 import streamlit as st
+import plotly.express as px
+import services.portfolio_service as portfolio_service
 from streamlit_autorefresh import st_autorefresh
 from services.news_service import (get_stock_news, format_news_for_ai)
 from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
 from services.market_service import (get_market_indices, get_market_mood, get_top_gainers, get_top_losers, get_most_active, get_52_week_breakouts)
 from services.market_ticker_service import (get_live_indices, render_market_ticker)
-from services.ai_service import generate_ai_summary
+from services.ai_service import (generate_ai_summary, generate_portfolio_ai_summary)
 from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)
 from services.compare_service import compare_stocks
 
@@ -589,3 +591,275 @@ elif menu == "Compare Stocks":
 
     else:
         st.warning("Enter both stock symbols.")
+        
+# ==========================================
+# Portfolio 
+# ==========================================
+
+elif menu == "Portfolio":
+    
+    st.title("💼 Portfolio Analysis")
+
+    st.markdown("---")
+
+    if "portfolio" not in st.session_state:
+        st.session_state.portfolio = portfolio_service.load_portfolio()
+
+    st.subheader("➕ Add Holding")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        symbol = st.text_input(
+            "Stock Symbol",
+            placeholder="Example: TCS"
+        )
+
+    with col2:
+        quantity = st.number_input(
+            "Quantity",
+            min_value=1,
+            step=1
+        )
+
+    col3, col4 = st.columns(2)
+
+    with col3:
+        buy_price = st.number_input(
+            "Buy Price (₹)",
+            min_value=0.0,
+            step=0.01
+        )
+
+    with col4:
+        current_price = st.number_input(
+            "Current Price (₹)",
+            min_value=0.0,
+            step=0.01
+        )
+
+    if st.button("➕ Add Holding"):
+
+        st.session_state.portfolio.append({
+
+            "Symbol": symbol.upper(),
+            "Quantity": quantity,
+            "Buy Price": buy_price,
+            "Current Price": current_price
+
+        })
+
+        st.success("Holding Added Successfully!")
+
+        st.rerun()
+        
+    if st.session_state.portfolio:
+
+        df, summary = portfolio_service.calculate_portfolio(
+            st.session_state.portfolio
+        )
+
+        st.markdown("---")
+
+        st.subheader("📋 Holdings")
+
+        st.dataframe(
+            df,
+            width="stretch",
+            hide_index=True
+        )
+        
+        # ==========================================
+        # Edit Holding
+        # ==========================================
+
+        st.markdown("---")
+
+        st.subheader("✏ Edit Holding")
+
+        stock_to_edit = st.selectbox(
+            "Select Stock to Edit",
+            df["Stock"],
+            key="edit_stock"
+        )
+
+        selected_holding = next(
+            (
+                holding
+                for holding in st.session_state.portfolio
+                if holding["Symbol"] == stock_to_edit
+            ),
+            None
+        )
+
+        if selected_holding:
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+
+                new_quantity = st.number_input(
+                    "Quantity",
+                    min_value=1,
+                    value=selected_holding["Quantity"],
+                    step=1,
+                    key="edit_quantity"
+                )
+
+                new_buy_price = st.number_input(
+                    "Buy Price (₹)",
+                    min_value=0.0,
+                    value=float(selected_holding["Buy Price"]),
+                    step=0.01,
+                    key="edit_buy"
+                )
+
+            with col2:
+
+                new_current_price = st.number_input(
+                    "Current Price (₹)",
+                    min_value=0.0,
+                    value=float(selected_holding["Current Price"]),
+                    step=0.01,
+                    key="edit_current"
+                )
+
+            if st.button("💾 Update Holding"):
+
+                selected_holding["Quantity"] = new_quantity
+                selected_holding["Buy Price"] = new_buy_price
+                selected_holding["Current Price"] = new_current_price
+
+                st.success(f"{stock_to_edit} updated successfully!")
+
+                st.rerun()
+        
+        st.markdown("---")
+
+        st.subheader("💰 Portfolio Summary")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            st.metric(
+                "Total Investment",
+                f"₹{summary['Total Investment']:,.2f}"
+            )
+
+            st.metric(
+                "Total Profit",
+                f"₹{summary['Total Profit']:,.2f}"
+            )
+
+        with col2:
+
+            st.metric(
+                "Current Value",
+                f"₹{summary['Current Value']:,.2f}"
+            )
+
+            st.metric(
+                "Return",
+                f"{summary['Total Return']:.2f}%"
+            )
+            
+        # ==========================================
+        # Portfolio Allocation
+        # ==========================================
+
+        st.markdown("---")
+        st.subheader("📊 Portfolio Allocation")
+
+        fig = portfolio_service.create_allocation_chart(
+            st.session_state.portfolio
+        )
+
+        st.plotly_chart(
+            fig,
+            use_container_width=True
+        )
+      
+        st.markdown("---")
+
+        st.subheader("🗑 Remove Holding")
+
+        stock_to_delete = st.selectbox(
+            "Select Stock",
+            df["Stock"]
+        )
+
+        if st.button("Delete Holding"):
+
+            st.session_state.portfolio = [
+                holding
+                for holding in st.session_state.portfolio
+                if holding["Symbol"] != stock_to_delete
+            ]
+
+            st.success(f"{stock_to_delete} removed successfully.")
+
+            st.rerun()
+
+        
+# ============================
+# Save & Load Portfolio
+# ============================
+        st.markdown("---")
+
+        st.subheader("Portfolio Actions")
+
+        col1, col2 = st.columns(2)
+
+        with col1:
+
+            if st.button("💾 Save Portfolio"):
+
+                portfolio_service.save_portfolio(
+                    st.session_state.portfolio
+                )
+
+                st.success("Portfolio saved successfully!")
+
+        with col2:
+
+            if st.button("📂 Load Portfolio"):
+
+                st.session_state.portfolio = portfolio_service.load_portfolio()
+
+                st.success("Portfolio loaded successfully!")
+
+                st.rerun()
+                
+# ============================
+# AI Advisor
+# ============================            
+                
+        st.markdown("---")
+        st.subheader("🤖 AI Portfolio Advisor")
+        if st.button("Generate AI Portfolio Analysis"):
+            with st.spinner("Analyzing Portfolio..."):
+                ai_response = generate_portfolio_ai_summary(
+                    st.session_state.portfolio,
+                    summary
+                )
+            st.success("Analysis Complete")
+            st.markdown(ai_response)
+            
+    # ============================
+    # Refresh Live Prices
+    # ============================            
+                
+        st.markdown("---")
+
+        st.subheader("🔄 Live Market")
+
+        if st.button("🔄 Refresh Live Prices"):
+
+            st.session_state.portfolio = portfolio_service.refresh_live_prices(
+                st.session_state.portfolio
+            )
+
+            st.success("Latest market prices updated!")
+
+            st.rerun()

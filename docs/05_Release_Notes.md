@@ -462,3 +462,129 @@ Release Date:
 ## Known Issues
 
 - P/E Ratio formatting enhancement pending.
+
+# 📋 Release Notes
+
+# AI Indian Stock Market Analyzer
+
+---
+
+# 🚀 Version 1.11
+
+**Release Date:** July 2026
+
+---
+
+# 🎯 Release Highlights
+
+Version 1.11 introduces a complete Portfolio Management system with AI-powered portfolio analysis using Google Gemini AI.
+
+This release transforms the application from a stock analysis tool into an AI-assisted investment platform.
+
+---
+
+# ✨ New Features
+
+## 💼 Portfolio Management
+
+Added a fully functional portfolio module.
+
+Features include:
+
+- Add Holdings
+- Edit Holdings
+- Delete Holdings
+- Portfolio Summary
+- Portfolio Allocation Chart
+- Save Portfolio
+- Load Portfolio
+- Automatic Portfolio Loading
+- Manual Live Price Refresh
+
+---
+
+## 🤖 AI Portfolio Advisor
+
+Integrated Google Gemini AI to analyze an investor's complete portfolio.
+
+Provides:
+
+- Portfolio Health
+- Risk Assessment
+- Portfolio Strengths
+- Weaknesses
+- Diversification Suggestions
+- Investment Recommendations
+
+---
+
+# ⚡ Improvements
+
+- Improved application architecture
+- Added Portfolio Service module
+- Better code modularization
+- Improved session management
+- Improved portfolio calculations
+- Better CSV handling
+- Faster loading
+
+---
+
+# 🐞 Bugs Fixed
+
+Fixed:
+
+- Portfolio save/load issues
+- Portfolio persistence after restart
+- refresh_live_prices import issue
+- Session state initialization
+- Portfolio refresh functionality
+- AI Portfolio Advisor integration
+- Service import restructuring
+
+---
+
+# ⚠ Known Limitations
+
+- Uses Yahoo Finance market data.
+- Some companies require official NSE symbols.
+
+Examples:
+
+- IOC
+- SBIN
+- SOUTHBANK
+
+Automatic symbol mapping will be introduced in Version 1.12.
+
+---
+
+# 📈 Performance Improvements
+
+- Better application startup
+- Reduced duplicate calculations
+- Cleaner service separation
+- Improved code readability
+
+---
+
+# 🔜 Upcoming (v1.12)
+
+Planned Features
+
+- Smart Stock Search
+- Company Name Search
+- Symbol Validation
+- Sector Allocation Analysis
+- Historical Portfolio Performance
+- Auto Price Refresh
+- Portfolio Health Score
+- Enhanced AI Recommendations
+
+---
+
+# 🙏 Thank You
+
+Thank you for using AI Indian Stock Market Analyzer.
+
+Feedback and suggestions are always welcome.

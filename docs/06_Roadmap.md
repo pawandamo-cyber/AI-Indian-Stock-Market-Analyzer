@@ -525,3 +525,15 @@ Portfolio Analysis
 - Best Performer
 - Worst Performer
 - AI Portfolio Insights
+
+### Version 1.12
+
+Planned features:
+
+- Smart Stock Search
+- Company Name Search
+- Symbol Auto Detection
+- Sector Allocation
+- Portfolio Performance History
+- Auto Live Refresh
+- Enhanced AI Portfolio Advisor

@@ -234,6 +234,7 @@ AI_Indian_Stock_Market_Analyzer/
 │   ├── news_service.py
 │   ├── stock_service.py
 │   └── technical_service.py
+|   └── portfolio_service.py
 │
 ├── assets/
 ├── Docs/
@@ -291,34 +292,41 @@ AI_Indian_Stock_Market_Analyzer/
 
 ---
 
-# 🔄 Upcoming Features
+# 💼 Portfolio Management (NEW in v1.11)
 
-## Version 1.11
+Manage your investment portfolio directly inside the application.
 
-### Portfolio Analysis
+Features include:
 
+- Add Holdings
+- Edit Holdings
+- Delete Holdings
 - Portfolio Summary
-- Investment Value
+- Investment Calculation
 - Current Value
 - Profit & Loss
-- Asset Allocation
-- Best Performing Stock
-- Worst Performing Stock
-- Portfolio Charts
-- AI Portfolio Insights
+- Return Percentage
+- Portfolio Allocation Pie Chart
+- Save Portfolio
+- Load Portfolio
+- Auto Load Portfolio
+- Manual Live Price Refresh
 
 ---
 
-## Version 2.0
+# 🤖 AI Portfolio Advisor (NEW)
 
-- AI News Sentiment Analysis
-- Watchlist
-- AI Portfolio Advisor
-- Real-Time Market Sentiment
-- Price Alerts
-- Database Integration
-- User Authentication
-- Multi-user Support
+Powered by **Google Gemini AI**
+
+Generates intelligent portfolio insights including:
+
+- Portfolio Health
+- Risk Analysis
+- Strengths
+- Weaknesses
+- Diversification Suggestions
+- Investment Recommendations
+
 
 ---
 
@@ -392,6 +400,20 @@ The goal is to build a complete AI-powered investment platform capable of:
 - ⭐ AI Verdict Dashboard
 - 📉 Market Insights
 - 📊 Professional Dashboard
+
+# 🚀 Roadmap
+
+### Version 1.12
+
+Planned features:
+
+- Smart Stock Search
+- Company Name Search
+- Symbol Auto Detection
+- Sector Allocation
+- Portfolio Performance History
+- Auto Live Refresh
+- Enhanced AI Portfolio Advisor
 
 ---
 

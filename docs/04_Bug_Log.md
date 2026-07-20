@@ -674,6 +674,246 @@ Updated NIFTY50 ticker list.
 - Functionality is correct.
 - Planned fix in a future version.
 
+# Current Version
+
+**v1.11**
+
+---
+
+# ✅ Bugs Fixed in v1.11
+
+## Portfolio Module
+
+### BUG-001
+
+**Issue**
+
+Portfolio data was lost after restarting the application.
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Implemented CSV-based portfolio persistence with automatic loading during application startup.
+
+---
+
+### BUG-002
+
+**Issue**
+
+Portfolio was not loading automatically.
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Initialized the portfolio using:
+
+```python
+load_portfolio()
+```
+
+during Streamlit session initialization.
+
+---
+
+### BUG-003
+
+**Issue**
+
+Portfolio Allocation Chart disappeared after editing holdings.
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Recalculated the portfolio before regenerating the Plotly pie chart.
+
+---
+
+### BUG-004
+
+**Issue**
+
+Delete Holding did not immediately refresh the portfolio summary.
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Forced Streamlit rerun after deletion and recalculated portfolio statistics.
+
+---
+
+### BUG-005
+
+**Issue**
+
+ImportError:
+
+```
+cannot import name 'refresh_live_prices'
+```
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Replaced individual imports with module-based imports.
+
+Old:
+
+```python
+from services.portfolio_service import ...
+```
+
+New:
+
+```python
+import services.portfolio_service as portfolio_service
+```
+
+---
+
+### BUG-006
+
+**Issue**
+
+NameError:
+
+```
+df is not defined
+```
+
+after importing the Portfolio Service.
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Updated every service call to use:
+
+```python
+portfolio_service.calculate_portfolio(...)
+```
+
+---
+
+### BUG-007
+
+**Issue**
+
+Portfolio AI Advisor produced:
+
+```
+TypeError
+generate_ai_summary()
+missing required positional arguments
+```
+
+**Status**
+
+✅ Fixed
+
+**Solution**
+
+Created an independent Gemini prompt specifically for portfolio analysis instead of calling the stock-level AI function.
+
+---
+
+### BUG-008
+
+**Issue**
+
+Live Price Refresh returned previous closing prices for some stocks.
+
+**Status**
+
+✅ Improved
+
+**Solution**
+
+Implemented `fast_info` with fallback to historical closing prices.
+
+Remaining limitation depends on Yahoo Finance data availability.
+
+---
+
+### BUG-009
+
+**Issue**
+
+Some companies such as:
+
+- Indian Oil
+- South Indian Bank
+
+did not return updated prices.
+
+**Status**
+
+⚠ Known Limitation
+
+**Reason**
+
+Yahoo Finance requires the official NSE trading symbol instead of the company name.
+
+Examples:
+
+| Company | NSE Symbol |
+|----------|------------|
+| Indian Oil | IOC |
+| South Indian Bank | SOUTHBANK |
+| State Bank of India | SBIN |
+
+This will be addressed in Version 1.12 through automatic symbol mapping.
+
+---
+
+# Known Limitations
+
+- Yahoo Finance data may be delayed.
+- Some stocks require official NSE symbols.
+- Auto-refresh is not implemented.
+- Company name search is not available.
+
+---
+
+# Planned Fixes (v1.12)
+
+- Smart Stock Search
+- Company Name Search
+- Symbol Validation
+- Autocomplete
+- Sector Allocation
+- Historical Portfolio Performance
+- Auto Live Refresh
+
+---
+
+# Overall Stability
+
+Current Version: **v1.11**
+
+Application Status:
+
+✅ Stable
+
+Recommended for GitHub Release.
+
 ---
 
 # End of Bug Log
