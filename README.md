@@ -415,6 +415,12 @@ Planned features:
 - Auto Live Refresh
 - Enhanced AI Portfolio Advisor
 
+## 🚀 Current Version
+
+**Version:** v2.0
+
+**Status:** Portfolio Module Completed ✅
+
 ---
 
 # 👨‍💻 Developer
