@@ -122,29 +122,98 @@ def refresh_live_prices(portfolio):
 
         symbol = holding["Symbol"].upper() + ".NS"
 
-        print("=" * 50)
-        print("Checking:", symbol)
+        print("=" * 60)
+        print(f"Refreshing {symbol}")
 
         try:
 
             stock = yf.Ticker(symbol)
 
-            print("Fast Info:", stock.fast_info)
-
+            # Get last 5 trading days
             history = stock.history(period="5d")
 
-            print(history.tail())
+            if history.empty:
+                print("No history returned. Keeping previous price.")
+                continue
 
-            if not history.empty:
+            # Remove rows with missing Close values
+            history = history.dropna(subset=["Close"])
 
-                latest_price = history["Close"].iloc[-1]
+            if history.empty:
+                print("No valid closing price found. Keeping previous price.")
+                continue
 
-                print("Latest Close:", latest_price)
+            # Latest available closing price
+            latest_price = history["Close"].iloc[-1]
 
-                holding["Current Price"] = round(float(latest_price), 2)
+            if pd.isna(latest_price):
+                print("Latest price is NaN. Keeping previous price.")
+                continue
+
+            holding["Current Price"] = round(float(latest_price), 2)
+
+            print(f"Updated Price: ₹{holding['Current Price']}")
 
         except Exception as e:
 
-            print("ERROR:", e)
+            print(f"Error updating {symbol}: {e}")
 
     return portfolio
+
+def get_sector_allocation(portfolio):
+    """
+    Returns sector-wise investment allocation.
+    """
+
+    sector_data = {}
+
+    for holding in portfolio:
+
+        symbol = holding["Symbol"] + ".NS"
+
+        try:
+            stock = yf.Ticker(symbol)
+
+            info = stock.info
+
+            print(f"Symbol: {symbol}")
+            print(info)
+
+            sector = info.get("sector", "Unknown")
+
+        except Exception:
+            sector = "Unknown"
+
+        investment = holding["Quantity"] * holding["Current Price"]
+
+        sector_data[sector] = sector_data.get(sector, 0) + investment
+
+    return sector_data
+
+import plotly.express as px
+
+
+def create_sector_chart(portfolio):
+
+    sector_data = get_sector_allocation(portfolio)
+
+    fig = px.pie(
+        names=list(sector_data.keys()),
+        values=list(sector_data.values()),
+        title="Sector Allocation"
+    )
+
+    fig.update_traces(textposition="inside", textinfo="percent+label")
+
+    return fig
+
+def get_sector_summary(portfolio):
+
+    sector_data = get_sector_allocation(portfolio)
+
+    summary = "\n".join(
+        f"{sector}: ₹{value:,.2f}"
+        for sector, value in sector_data.items()
+    )
+
+    return summary

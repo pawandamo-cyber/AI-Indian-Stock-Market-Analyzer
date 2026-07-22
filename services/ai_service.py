@@ -187,3 +187,29 @@ Keep the response under 250 words.
 
         return f"AI Error: {e}"
     
+def generate_sector_ai_summary(sector_summary):
+
+    prompt = f"""
+    Analyze the following portfolio sector allocation.
+
+    {sector_summary}
+
+    Give:
+    1. Diversification analysis
+    2. Concentration risk
+    3. Missing sectors
+    4. Suggestions
+    """
+
+    try:
+        response = model.generate_content(prompt)
+        return response.text
+
+    except ResourceExhausted:
+        return (
+            "⚠️ Gemini API free-tier quota exceeded.\n\n"
+            "Please wait a minute and try again, or switch to a paid API plan."
+        )
+
+    except Exception as e:
+        return f"Error: {e}"    

@@ -7,9 +7,12 @@ from services.stock_service import get_stock_info
 from services.chart_service import get_stock_chart
 from services.market_service import (get_market_indices, get_market_mood, get_top_gainers, get_top_losers, get_most_active, get_52_week_breakouts)
 from services.market_ticker_service import (get_live_indices, render_market_ticker)
-from services.ai_service import (generate_ai_summary, generate_portfolio_ai_summary)
+from services.ai_service import (generate_ai_summary, generate_portfolio_ai_summary, generate_sector_ai_summary)
 from services.technical_service import (calculate_rsi, calculate_macd, calculate_bollinger, calculate_overall_score)
 from services.compare_service import compare_stocks
+from services.stock_search_service import (search_company, get_symbol)
+from components.stock_search_widget import stock_search_widget
+from streamlit_autorefresh import st_autorefresh
 
 # ----------------------------
 # Page Configuration
@@ -73,20 +76,10 @@ if menu == "Home":
         "technical indicators, fundamentals, news, and AI."
     )
 
-    # -------------------------------
-    # Remember selected stock
-    # -------------------------------
+    stock = stock_search_widget(key="home")
 
-    if "stock" not in st.session_state:
-        st.session_state.stock = ""
-
-    stock = st.text_input(
-        "🔍 Enter NSE Stock Symbol",
-        value=st.session_state.stock,
-        placeholder="Example: RELIANCE, TCS, HDFCBANK"
-    )
-
-    st.session_state.stock = stock
+    if stock:
+        st.session_state.stock = stock
 
     # -------------------------------
     # Remember selected period
@@ -800,8 +793,48 @@ elif menu == "Portfolio":
             st.success(f"{stock_to_delete} removed successfully.")
 
             st.rerun()
+        # ============================
+        # Sector Diversification
+        # ============================
 
+        st.markdown("---")
+
+        st.subheader("🏢 Sector Diversification")
+
+        sector_fig = portfolio_service.create_sector_chart(
+            st.session_state.portfolio
+        )
+
+        st.plotly_chart(
+            sector_fig,
+            use_container_width=True
+        )
         
+        st.subheader("🤖 AI Diversification Analysis")
+        
+        if "sector_ai_response" not in st.session_state:
+            st.session_state.sector_ai_response = None
+
+        if st.button("Analyze Diversification"):
+
+            sector_summary = portfolio_service.get_sector_summary(
+                st.session_state.portfolio
+            )
+
+            st.session_state.sector_ai_response = (
+                generate_sector_ai_summary(
+                    sector_summary
+                )
+            )
+
+        if st.session_state.sector_ai_response:
+
+            st.success("Analysis Complete")
+
+            st.markdown(
+                st.session_state.sector_ai_response
+            )
+
 # ============================
 # Save & Load Portfolio
 # ============================
@@ -832,20 +865,31 @@ elif menu == "Portfolio":
                 st.rerun()
                 
 # ============================
-# AI Advisor
-# ============================            
-                
+# AI Portfolio Advisor
+# ============================
+
         st.markdown("---")
         st.subheader("🤖 AI Portfolio Advisor")
+
+        if "portfolio_ai_response" not in st.session_state:
+            st.session_state.portfolio_ai_response = None
+
         if st.button("Generate AI Portfolio Analysis"):
+
             with st.spinner("Analyzing Portfolio..."):
-                ai_response = generate_portfolio_ai_summary(
-                    st.session_state.portfolio,
-                    summary
+
+                st.session_state.portfolio_ai_response = (
+                    generate_portfolio_ai_summary(
+                        st.session_state.portfolio,
+                        summary
+                    )
                 )
+
+        if st.session_state.portfolio_ai_response:
+
             st.success("Analysis Complete")
-            st.markdown(ai_response)
-            
+
+            st.markdown(st.session_state.portfolio_ai_response)
     # ============================
     # Refresh Live Prices
     # ============================            
@@ -863,3 +907,39 @@ elif menu == "Portfolio":
             st.success("Latest market prices updated!")
 
             st.rerun()
+            
+        st.subheader("📡 Automatic Price Refresh")
+
+        if "refresh_interval" not in st.session_state:
+            st.session_state.refresh_interval = "Off"
+
+        options = ["Off", "30 sec", "60 sec", "120 sec"]
+
+        refresh_interval = st.selectbox(
+            "Refresh Interval",
+            options,
+            index=options.index(st.session_state.refresh_interval)
+        )
+
+        st.session_state.refresh_interval = refresh_interval
+        
+        # ============================
+        # Auto Refresh
+        # ============================
+
+        if refresh_interval != "Off":
+
+            interval_map = {
+                "30 sec": 30000,
+                "60 sec": 60000,
+                "120 sec": 120000
+            }
+
+            st_autorefresh(
+                interval=interval_map[refresh_interval],
+                key="portfolio_auto_refresh"
+            )
+
+            st.session_state.portfolio = portfolio_service.refresh_live_prices(
+                st.session_state.portfolio
+            )
